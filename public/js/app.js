@@ -1791,6 +1791,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -36721,7 +36722,7 @@ var render = function() {
       "div",
       {
         staticClass:
-          "leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col"
+          "leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col-reverse"
       },
       [
         _c(
@@ -36758,61 +36759,81 @@ var render = function() {
           "div",
           {
             staticClass:
-              "sm:w-3/4 w-full p-6 text-sm bg-white pt-8 overflow-y-scroll",
-            staticStyle: { "max-height": "390px" }
+              "sm:w-3/4 w-full p-6 text-sm bg-white pt-8 overflow-y-auto",
+            staticStyle: { "max-height": "390px", "min-height": "390px" }
           },
-          _vm._l(_vm.tasks, function(task) {
-            return _c(
-              "div",
-              { key: task.id, staticClass: "flex border-b pb-3 mb-6" },
-              [
-                _c(
+          [
+            !_vm.tasks.length > 0
+              ? _c(
                   "div",
                   {
-                    class:
-                      "border border-grey-light my-auto rounded-full mr-4 w-5 h-5 text-center text-grey-dark cursor-pointer hover:border-" +
-                      _vm.getColor() +
-                      "-dark hover:text-" +
-                      _vm.getColor(),
-                    on: {
-                      click: function($event) {
-                        return _vm.markTask(task)
-                      }
-                    }
+                    class: "text-center mt-3 text-" + _vm.getColor() + "-dark"
                   },
-                  [
-                    _vm.isCompleted(task)
-                      ? _c(
-                          "svg",
-                          {
-                            staticClass: "fill-current",
-                            staticStyle: { "margin-bottom": "1px" },
-                            attrs: {
-                              xmlns: "http://www.w3.org/2000/svg",
-                              height: "10px",
-                              width: "10px",
-                              viewBox: "0 0 24 24"
-                            }
-                          },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
-                              }
-                            })
-                          ]
-                        )
-                      : _vm._e()
-                  ]
-                ),
-                _vm._v(
-                  "\n                " + _vm._s(task.body) + "\n            "
+                  [_vm._v("Er zijn geen taken beschikbaar.")]
                 )
-              ]
-            )
-          }),
-          0
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.tasks, function(task) {
+              return _c(
+                "div",
+                { key: task.id, staticClass: "flex border-b pb-3 mb-6" },
+                [
+                  _c(
+                    "div",
+                    {
+                      class:
+                        "relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" +
+                        _vm.getColor() +
+                        "-dark hover:text-" +
+                        _vm.getColor(),
+                      staticStyle: {
+                        "min-width": "1.25rem",
+                        "min-height": "1.25rem"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.markTask(task)
+                        }
+                      }
+                    },
+                    [
+                      _vm.isCompleted(task)
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass: "absolute fill-current",
+                              staticStyle: {
+                                "margin-bottom": "1px",
+                                left: "23%",
+                                top: "27%"
+                              },
+                              attrs: {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                height: "10px",
+                                width: "10px",
+                                viewBox: "0 0 24 24"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
+                                }
+                              })
+                            ]
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(
+                    "\n                " + _vm._s(task.body) + "\n            "
+                  )
+                ]
+              )
+            })
+          ],
+          2
         )
       ]
     ),
