@@ -2,6 +2,7 @@
 
 use App\ListModel;
 use App\TaskModel;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,14 @@ Route::get('/', function () {
     $tasks = TaskModel::all();
 
     return view('index', compact('lists', 'tasks'));
+});
+
+Route::post('/tasks/{task}/check', function (Request $request, TaskModel $task) {
+    $request->validate([
+        'task' => 'required'
+    ]);
+
+    ($task->completed === 1) ? $task->completed = 0 : $task->completed = 1;
+
+    $task->save();
 });
