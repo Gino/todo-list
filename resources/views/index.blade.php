@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 </head>
-<body class="font-sans bg-grey-lightest antialiased">
+<body class="font-sans bg-grey-lighter antialiased">
     <div id="app">
         <tasks-component :tasks="{{ $tasks }}" :lists="{{ $lists }}"></tasks-component>
     </div>

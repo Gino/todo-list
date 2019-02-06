@@ -1,8 +1,5 @@
 <?php
 
-use App\ListModel;
-use App\TaskModel;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,19 +12,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    $lists = ListModel::all();
-    $tasks = TaskModel::all();
+Route::get('/', 'TasksController@index');
 
-    return view('index', compact('lists', 'tasks'));
-});
-
-Route::post('/tasks/{task}/check', function (Request $request, TaskModel $task) {
-    $request->validate([
-        'task' => 'required'
-    ]);
-
-    ($task->completed === 1) ? $task->completed = 0 : $task->completed = 1;
-
-    $task->save();
-});
+// AJAX Routes
+Route::post('/tasks/{task}/check', 'TasksController@markTask');

@@ -1790,6 +1790,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -1822,7 +1823,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         !_this2.isCompleted(task) ? _this2.completedTasks.push(task.id) : _this2.completedTasks.splice(_this2.completedTasks.indexOf(task.id), 1);
       }).catch(function (err) {
-        console.log(err);
+        console.error(err);
       });
     },
     isCompleted: function isCompleted(task) {
@@ -36696,103 +36697,127 @@ var render = function() {
         class:
           "bg-" +
           _vm.getColor() +
-          " text-white p-4 mt-8 font-semibold shadow border-t-4 rounded-t border-" +
+          " flex text-white p-4 sm:mt-8 mt-0 font-semibold shadow border-t-4 sm:rounded-t rounded-none border-" +
           _vm.getColor() +
           "-dark"
       },
-      [_vm._v("\n        Todo-list app\n    ")]
+      [
+        _c("div", { staticClass: "flex-1 my-auto" }, [_vm._v("Todo-list app")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            class:
+              "justify-end text-sm bg-" +
+              _vm.getColor() +
+              "-dark px-3 py-2 rounded cursor-pointer"
+          },
+          [_vm._v("+ Taak toevoegen")]
+        )
+      ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "leading-normal rounded-b flex shadow" }, [
-      _c(
-        "div",
-        { staticClass: "w-1/4 bg-grey-lightest p-4" },
-        [
-          _c(
-            "div",
-            { staticClass: "font-semibold text-grey-darkest text-base mb-4" },
-            [_vm._v("Lijsten")]
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.lists, function(list) {
+    _c(
+      "div",
+      {
+        staticClass:
+          "leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col"
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "sm:w-1/4 w-full bg-grey-lightest p-4" },
+          [
+            _c(
+              "div",
+              { staticClass: "font-semibold text-grey-darkest text-base mb-4" },
+              [_vm._v("Lijsten")]
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.lists, function(list) {
+              return _c(
+                "div",
+                { key: list.id, staticClass: "text-sm mb-2 rounded" },
+                [
+                  _c(
+                    "a",
+                    {
+                      class: "text-" + _vm.getColor() + " no-underline",
+                      attrs: { href: "#" }
+                    },
+                    [_vm._v(_vm._s(list.name))]
+                  )
+                ]
+              )
+            })
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "sm:w-3/4 w-full p-6 text-sm bg-white pt-8 overflow-y-scroll",
+            staticStyle: { "max-height": "390px" }
+          },
+          _vm._l(_vm.tasks, function(task) {
             return _c(
               "div",
-              { key: list.id, staticClass: "text-sm mb-2 rounded" },
+              { key: task.id, staticClass: "flex border-b pb-3 mb-6" },
               [
                 _c(
-                  "a",
+                  "div",
                   {
-                    class: "text-" + _vm.getColor() + " no-underline",
-                    attrs: { href: "#" }
+                    class:
+                      "border border-grey-light my-auto rounded-full mr-4 w-5 h-5 text-center text-grey-dark cursor-pointer hover:border-" +
+                      _vm.getColor() +
+                      "-dark hover:text-" +
+                      _vm.getColor(),
+                    on: {
+                      click: function($event) {
+                        return _vm.markTask(task)
+                      }
+                    }
                   },
-                  [_vm._v(_vm._s(list.name))]
+                  [
+                    _vm.isCompleted(task)
+                      ? _c(
+                          "svg",
+                          {
+                            staticClass: "fill-current",
+                            staticStyle: { "margin-bottom": "1px" },
+                            attrs: {
+                              xmlns: "http://www.w3.org/2000/svg",
+                              height: "10px",
+                              width: "10px",
+                              viewBox: "0 0 24 24"
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
+                              }
+                            })
+                          ]
+                        )
+                      : _vm._e()
+                  ]
+                ),
+                _vm._v(
+                  "\n                " + _vm._s(task.body) + "\n            "
                 )
               ]
             )
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "w-3/4 p-6 text-sm bg-white pt-8" },
-        _vm._l(_vm.tasks, function(task) {
-          return _c(
-            "div",
-            { key: task.id, staticClass: "flex border-b pb-3 mb-6" },
-            [
-              _c(
-                "div",
-                {
-                  class:
-                    "border border-grey-light my-auto rounded-full mr-4 w-5 h-5 text-center text-grey-dark cursor-pointer hover:border-" +
-                    _vm.getColor() +
-                    "-dark hover:text-" +
-                    _vm.getColor(),
-                  on: {
-                    click: function($event) {
-                      return _vm.markTask(task)
-                    }
-                  }
-                },
-                [
-                  _vm.isCompleted(task)
-                    ? _c(
-                        "svg",
-                        {
-                          staticClass: "fill-current",
-                          staticStyle: { "margin-bottom": "1px" },
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            height: "10px",
-                            width: "10px",
-                            viewBox: "0 0 24 24"
-                          }
-                        },
-                        [
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
-                            }
-                          })
-                        ]
-                      )
-                    : _vm._e()
-                ]
-              ),
-              _vm._v(
-                "\n                " + _vm._s(task.body) + "\n            "
-              )
-            ]
-          )
-        }),
-        0
-      )
-    ]),
+          }),
+          0
+        )
+      ]
+    ),
     _vm._v(" "),
-    _c("div", { staticClass: "flex justify-end" }, [
+    _c("div", { staticClass: "flex justify-end sm:mr-0 mr-2" }, [
       _c("div", {
         staticClass:
           "bg-red p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer",
