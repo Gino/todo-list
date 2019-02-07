@@ -10,8 +10,8 @@ class TasksController extends Controller
 {
     public function index(ListModel $lists, TaskModel $tasks)
     {
-        $lists = $lists->all();
-        $tasks = $tasks->all();
+        $lists = auth()->user()->lists;
+        $tasks = auth()->user()->tasks;
 
         return view('index', compact('lists', 'tasks'));
     }

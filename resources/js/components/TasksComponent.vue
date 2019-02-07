@@ -5,11 +5,11 @@
             <div :class='"justify-end text-sm bg-" + getColor() + "-dark px-3 py-2 rounded cursor-pointer"'>+ Taak toevoegen</div>
         </div>
         <div class="leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col-reverse">
-            <div class="sm:w-1/4 w-full bg-grey-lightest p-4">
+            <div class="sm:w-1/4 w-full sm:rounded-b rounded-none bg-grey-lightest p-4">
                 <div class="font-semibold text-grey-darkest text-base mb-4">Lijsten</div>
                 <div v-for="list in lists" :key="list.id" class="text-sm mb-2 rounded"><a :class='"text-" + getColor() + " no-underline"' href="#">{{ list.name }}</a></div>
             </div>
-            <div class="sm:w-3/4 w-full p-6 text-sm bg-white pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
+            <div class="sm:w-3/4 w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
                 <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>Er zijn geen taken beschikbaar.</div>
                 <div v-for="task in tasks" :key="task.id" class="flex border-b pb-3 mb-6">
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">
@@ -34,7 +34,8 @@
         data () {
             return {
                 color: 'red',
-                completedTasks: []
+                completedTasks: [],
+                user: null
             }
         },
 
@@ -43,6 +44,12 @@
                 return task.completed === 1
             }).forEach(task => {
                 this.completedTasks.push(task.id)
+            })
+
+            axios.get('/user').then(response => {
+                if (response.status !== 200) return
+
+                this.user = response.data.user
             })
         },
 

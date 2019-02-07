@@ -12,7 +12,18 @@
 |
 */
 
-Route::get('/', 'TasksController@index');
+Route::get('/', 'TasksController@index')->middleware('auth');
+
+// Route::get('/', function () {
+//     $tasks = App\ListModel::with('tasks')->get();
+
+//     return $tasks;
+// });
+
+Route::get('/login', 'AuthController@index')->middleware('guest')->name('login');
 
 // AJAX Routes
+Route::get('/user', 'AuthController@getUser');
+
 Route::post('/tasks/{task}/check', 'TasksController@markTask');
+Route::post('/login', 'AuthController@login');
