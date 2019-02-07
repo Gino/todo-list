@@ -18,6 +18,10 @@ class TasksController extends Controller
 
     public function markTask(Request $request, TaskModel $task)
     {
+        if (!request()->ajax()) {
+            abort(404);
+        }
+
         $request->validate([
             'task' => 'required'
         ]);
@@ -25,5 +29,27 @@ class TasksController extends Controller
         ($task->completed === 1) ? $task->completed = 0 : $task->completed = 1;
 
         $task->save();
+    }
+
+    public function getSpecificTasks($list)
+    {
+        if (!request()->ajax()) {
+            abort(404);
+        }
+        $list = ListModel::find($list);
+
+        if ($list->user_id !== auth()->user()->id) {
+            return [];
+        }
+
+        $tasks = $list->tasks;
+
+        foreach ($tasks as $task) {
+            if ($task->user_id !== auth()->user()->id) {
+                return [];
+            }
+        }
+
+        return $tasks;
     }
 }

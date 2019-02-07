@@ -42,4 +42,15 @@ class AuthController extends Controller
             }
         }
     }
+
+    public function logout()
+    {
+        if (auth()->user()) {
+            Auth::logout();
+
+            return redirect()->route('login');
+        } else {
+            abort(404);
+        }
+    }
 }

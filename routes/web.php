@@ -21,9 +21,11 @@ Route::get('/', 'TasksController@index')->middleware('auth');
 // });
 
 Route::get('/login', 'AuthController@index')->middleware('guest')->name('login');
+Route::get('/logout', 'AuthController@logout');
 
 // AJAX Routes
 Route::get('/user', 'AuthController@getUser');
+Route::get('/tasks/list/{list}', 'TasksController@getSpecificTasks');
 
 Route::post('/tasks/{task}/check', 'TasksController@markTask');
 Route::post('/login', 'AuthController@login');

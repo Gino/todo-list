@@ -1901,12 +1901,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
     return {
       color: 'red',
       completedTasks: [],
+      specificTasks: [],
+      allTasks: true,
       user: null
     };
   },
@@ -1930,13 +1937,42 @@ __webpack_require__.r(__webpack_exports__);
     getColor: function getColor() {
       return this.color;
     },
-    markTask: function markTask(task) {
+    getTasks: function getTasks() {
+      if (this.allTasks) {
+        return this.tasks;
+      } else {
+        return this.specificTasks;
+      }
+    },
+    showAllTasks: function showAllTasks() {
+      this.allTasks = true;
+      document.getElementById('allTasks').textContent = 'Alle taken';
+    },
+    getSpecificTasks: function getSpecificTasks(list) {
       var _this2 = this;
+
+      this.specificTasks = [];
+      this.allTasks = false;
+      axios.get('/tasks/list/' + list.id).then(function (res) {
+        if (res.status !== 200) {
+          _this2.allTasks = true;
+          return;
+        }
+
+        var tasks = res.data;
+        tasks.forEach(function (task) {
+          _this2.specificTasks.push(task);
+        });
+        document.getElementById('allTasks').textContent = list.name;
+      });
+    },
+    markTask: function markTask(task) {
+      var _this3 = this;
 
       axios.post('/tasks/' + task.id + '/check', {
         'task': task
       }).then(function (res) {
-        !_this2.isCompleted(task) ? _this2.completedTasks.push(task.id) : _this2.completedTasks.splice(_this2.completedTasks.indexOf(task.id), 1);
+        !_this3.isCompleted(task) ? _this3.completedTasks.push(task.id) : _this3.completedTasks.splice(_this3.completedTasks.indexOf(task.id), 1);
       }).catch(function (err) {
         console.error(err);
       });
@@ -37166,14 +37202,27 @@ var render = function() {
         _c("div", { staticClass: "flex-1 my-auto" }, [_vm._v("Todo-list app")]),
         _vm._v(" "),
         _c(
-          "div",
+          "a",
           {
             class:
-              "justify-end text-sm bg-" +
+              "justify-end text-white no-underline text-sm bg-" +
               _vm.getColor() +
-              "-dark px-3 py-2 rounded cursor-pointer"
+              "-dark px-3 py-2 rounded cursor-pointer",
+            attrs: { href: "/task/create" }
           },
           [_vm._v("+ Taak toevoegen")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            class:
+              "justify-end text-white no-underline text-sm bg-" +
+              _vm.getColor() +
+              "-dark px-3 py-2 rounded cursor-pointer ml-3",
+            attrs: { href: "/logout" }
+          },
+          [_vm._v("Uitloggen")]
         )
       ]
     ),
@@ -37194,25 +37243,43 @@ var render = function() {
           [
             _c(
               "div",
-              { staticClass: "font-semibold text-grey-darkest text-base mb-4" },
+              {
+                staticClass:
+                  "font-semibold text-grey-darkest text-base mb-4 mt-4"
+              },
               [_vm._v("Lijsten")]
             ),
             _vm._v(" "),
+            !_vm.allTasks
+              ? _c(
+                  "div",
+                  {
+                    staticClass:
+                      "font-semibold bg-grey-lighter text-grey-darkest cursor-pointer mb-4 text-sm rounded p-2",
+                    on: { click: _vm.showAllTasks }
+                  },
+                  [_vm._v("\n                Alle taken\n            ")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _vm._l(_vm.lists, function(list) {
-              return _c(
-                "div",
-                { key: list.id, staticClass: "text-sm mb-2 rounded" },
-                [
-                  _c(
-                    "a",
-                    {
-                      class: "text-" + _vm.getColor() + " no-underline",
-                      attrs: { href: "#" }
-                    },
-                    [_vm._v(_vm._s(list.name))]
-                  )
-                ]
-              )
+              return _c("div", { key: list.id, staticClass: "text-sm mb-2" }, [
+                _c(
+                  "span",
+                  {
+                    class:
+                      "text-" +
+                      _vm.getColor() +
+                      " cursor-pointer hover:underline",
+                    on: {
+                      click: function($event) {
+                        return _vm.getSpecificTasks(list)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(list.name))]
+                )
+              ])
             })
           ],
           2
@@ -37226,6 +37293,18 @@ var render = function() {
             staticStyle: { "max-height": "390px", "min-height": "390px" }
           },
           [
+            _vm.tasks.length > 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass:
+                      "font-semibold text-grey-darkest text-base mb-6",
+                    attrs: { id: "allTasks" }
+                  },
+                  [_vm._v("Alle taken")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             !_vm.tasks.length > 0
               ? _c(
                   "div",
@@ -37236,7 +37315,7 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            _vm._l(_vm.tasks, function(task) {
+            _vm._l(_vm.getTasks(), function(task) {
               return _c(
                 "div",
                 { key: task.id, staticClass: "flex border-b pb-3 mb-6" },
