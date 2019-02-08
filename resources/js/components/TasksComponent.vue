@@ -17,18 +17,23 @@
                 <div v-if="!allTasks" @click="showAllTasks" class="font-semibold bg-grey-lighter text-grey-darkest cursor-pointer mb-4 text-sm rounded p-2">
                     Alle taken
                 </div>
-                <div v-for="list in lists" :key="list.id" class="text-sm mb-2"><span @click="getSpecificTasks(list)" :class='"text-" + getColor() + " cursor-pointer hover:underline"'>{{ list.name }}</span></div>
+                <div v-for="list in lists" :key="list.id" class="list flex relative text-sm mb-2">
+                    <span @click="getSpecificTasks(list)" :class='"text-" + getColor() + " cursor-pointer hover:underline"'>{{ list.name }}</span>
+                    <div :class='"bg-" + getColor() + "-light hover:bg-" + getColor() + " delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
+                        <div @click="deleteList(list)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">-</div>
+                    </div>
+                </div>
             </div>
             <div class="sm:w-3/4 w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
                 <div id="allTasks" v-if="tasks.length > 0" class="font-semibold text-grey-darkest text-base mb-6">Alle taken</div>
                 <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>Er zijn geen taken beschikbaar.</div>
-                <div v-for="task in getTasks()" :ref='"task-" + task.id' :key="task.id" class="relative flex border-b pb-3 mb-6">
+                <div v-for="task in getTasks()" :ref='"task-" + task.id' :key="task.id" class="task relative flex border-b pb-3 mb-6">
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">
                         <svg v-if="isCompleted(task)" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1px; left: 23%; top: 27%" class="absolute fill-current" height="10px" width="10px" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                     </div>
                     <input @change="saveTask(task)" :ref='task.id' class="w-3/4 outline-none cursor-pointer" type="text" :value='task.body'>
-                    <div :class='"bg-" + getColor() + "-lightest hover:bg-" + getColor() + " h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
-                        <div @click="deleteTask(task)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">x</div>
+                    <div :class='"bg-" + getColor() + "-light hover:bg-" + getColor() + " delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
+                        <div @click="deleteTask(task)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">-</div>
                     </div>
                 </div>
             </div>

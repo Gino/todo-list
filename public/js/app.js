@@ -2088,6 +2088,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -37862,23 +37867,62 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm._l(_vm.lists, function(list) {
-              return _c("div", { key: list.id, staticClass: "text-sm mb-2" }, [
-                _c(
-                  "span",
-                  {
-                    class:
-                      "text-" +
-                      _vm.getColor() +
-                      " cursor-pointer hover:underline",
-                    on: {
-                      click: function($event) {
-                        return _vm.getSpecificTasks(list)
+              return _c(
+                "div",
+                {
+                  key: list.id,
+                  staticClass: "list flex relative text-sm mb-2"
+                },
+                [
+                  _c(
+                    "span",
+                    {
+                      class:
+                        "text-" +
+                        _vm.getColor() +
+                        " cursor-pointer hover:underline",
+                      on: {
+                        click: function($event) {
+                          return _vm.getSpecificTasks(list)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v(_vm._s(list.name))]
-                )
-              ])
+                    },
+                    [_vm._v(_vm._s(list.name))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      class:
+                        "bg-" +
+                        _vm.getColor() +
+                        "-light hover:bg-" +
+                        _vm.getColor() +
+                        " delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "my-auto font-bold text-white absolute",
+                          staticStyle: {
+                            bottom: "0",
+                            top: "-25%",
+                            left: "0",
+                            right: "0"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteList(list)
+                            }
+                          }
+                        },
+                        [_vm._v("-")]
+                      )
+                    ]
+                  )
+                ]
+              )
             })
           ],
           2
@@ -37921,7 +37965,7 @@ var render = function() {
                   key: task.id,
                   ref: "task-" + task.id,
                   refInFor: true,
-                  staticClass: "relative flex border-b pb-3 mb-6"
+                  staticClass: "task relative flex border-b pb-3 mb-6"
                 },
                 [
                   _c(
@@ -37992,9 +38036,9 @@ var render = function() {
                       class:
                         "bg-" +
                         _vm.getColor() +
-                        "-lightest hover:bg-" +
+                        "-light hover:bg-" +
                         _vm.getColor() +
-                        " h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"
+                        " delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"
                     },
                     [
                       _c(
@@ -38013,7 +38057,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("x")]
+                        [_vm._v("-")]
                       )
                     ]
                   )

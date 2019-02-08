@@ -6186,6 +6186,24 @@ table {
  * @import "utilities/skew-transforms";
  */
 
+.task .delete {
+  opacity: 0;
+  transition: opacity .05s ease-in;
+}
+
+.task:hover .delete {
+  opacity: 1 !important;
+}
+
+.list .delete {
+  opacity: 0;
+  transition: opacity .05s ease-in;
+}
+
+.list:hover .delete {
+  opacity: 1 !important;
+}
+
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;
