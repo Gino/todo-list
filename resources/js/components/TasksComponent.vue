@@ -2,7 +2,7 @@
     <div class="container max-w-lg mx-auto">
         <div :class='"bg-" + getColor() + " flex text-white p-4 sm:mt-8 mt-0 font-semibold shadow border-t-4 sm:rounded-t rounded-none border-" + getColor() + "-dark"'>
             <div class="flex-1 my-auto">Todo-list app</div>
-            <a href="/task/create" :class='"justify-end text-white no-underline text-sm bg-" + getColor() + "-dark px-3 py-2 rounded cursor-pointer"'>+ Taak toevoegen</a>
+            <a href="/profile" :class='"justify-end text-white no-underline text-sm bg-" + getColor() + "-dark px-3 py-2 rounded cursor-pointer"'>Mijn profiel</a>
             <a href="/logout" :class='"justify-end text-white no-underline text-sm bg-" + getColor() + "-dark px-3 py-2 rounded cursor-pointer ml-3"'>Uitloggen</a>
         </div>
         <div class="leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col-reverse">
@@ -25,7 +25,13 @@
                 </div>
             </div>
             <div class="sm:w-3/4 w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
-                <div id="allTasks" v-if="tasks.length > 0" class="font-semibold text-grey-darkest text-base mb-6">Alle taken</div>
+                <div id="allTasks" v-if="tasks.length > 0" class="font-semibold relative flex text-grey-darkest text-base mb-6">
+                    Alle taken
+
+                    <div :class='"bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
+                        <a class="no-underline" href="/task/create"><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
+                    </div>
+                </div>
                 <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>Er zijn geen taken beschikbaar.</div>
                 <div v-for="task in getTasks()" :ref='"task-" + task.id' :key="task.id" class="task relative flex border-b pb-3 mb-6">
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">

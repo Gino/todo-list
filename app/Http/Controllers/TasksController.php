@@ -13,7 +13,7 @@ class TasksController extends Controller
         $lists = auth()->user()->lists;
         $tasks = auth()->user()->tasks;
 
-        return view('index', compact('lists', 'tasks'));
+        return view('tasks.index', compact('lists', 'tasks'));
     }
 
     public function create()

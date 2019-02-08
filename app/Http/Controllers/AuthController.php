@@ -14,13 +14,14 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        if ($request->ajax()) {
-            return response()->json([
-                'user' => Auth::user()
-            ]);
-        } else {
-            abort(404);
-        }
+        // if ($request->ajax()) {
+        return response()->json([
+            'user' => auth()->user(),
+            'role' => auth()->user()->role->name
+        ]);
+        // } else {
+        //     abort(404);
+        // }
     }
 
     public function login(Request $request)

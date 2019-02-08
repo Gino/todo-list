@@ -24,6 +24,7 @@ Vue.component('tasks-component', require('./components/TasksComponent.vue').defa
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
 Vue.component('create-task-component', require('./components/CreateTaskComponent.vue').default);
 Vue.component('create-list-component', require('./components/CreateListComponent.vue').default);
+Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
 
 Vue.use(require('vue-cookies'))
 
