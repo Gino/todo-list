@@ -22,6 +22,8 @@ window.Vue = require('vue');
 
 Vue.component('tasks-component', require('./components/TasksComponent.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
+Vue.component('create-task-component', require('./components/CreateTaskComponent.vue').default);
+Vue.component('create-list-component', require('./components/CreateListComponent.vue').default);
 
 Vue.use(require('vue-cookies'))
 

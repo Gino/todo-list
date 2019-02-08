@@ -7,7 +7,13 @@
         </div>
         <div class="leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col-reverse">
             <div class="sm:w-1/4 w-full sm:rounded-b rounded-none bg-grey-lightest p-4">
-                <div class="font-semibold text-grey-darkest text-base mb-4 mt-4">Lijsten</div>
+                <div class="font-semibold flex text-grey-darkest relative text-base mb-4 mt-4">
+                    Lijsten
+
+                    <div :class='"bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
+                        <a class="no-underline" href="/list/create"><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
+                    </div>
+                </div>
                 <div v-if="!allTasks" @click="showAllTasks" class="font-semibold bg-grey-lighter text-grey-darkest cursor-pointer mb-4 text-sm rounded p-2">
                     Alle taken
                 </div>
@@ -16,11 +22,14 @@
             <div class="sm:w-3/4 w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
                 <div id="allTasks" v-if="tasks.length > 0" class="font-semibold text-grey-darkest text-base mb-6">Alle taken</div>
                 <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>Er zijn geen taken beschikbaar.</div>
-                <div v-for="task in getTasks()" :key="task.id" class="flex border-b pb-3 mb-6">
+                <div v-for="task in getTasks()" :ref='"task-" + task.id' :key="task.id" class="relative flex border-b pb-3 mb-6">
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">
                         <svg v-if="isCompleted(task)" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1px; left: 23%; top: 27%" class="absolute fill-current" height="10px" width="10px" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                     </div>
-                    {{ task.body }}
+                    <input @change="saveTask(task)" :ref='task.id' class="w-3/4 outline-none cursor-pointer" type="text" :value='task.body'>
+                    <div :class='"bg-" + getColor() + "-lightest hover:bg-" + getColor() + " h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
+                        <div @click="deleteTask(task)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">x</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,6 +56,8 @@
         },
 
         mounted () {
+            this.color = this.$cookies.isKey('color') ? this.$cookies.get('color') : 'red'
+
             this.tasks.filter(task => {
                 return task.completed === 1
             }).forEach(task => {
@@ -63,6 +74,8 @@
         methods: {
             setColor (color) {
                 this.color = color
+
+                this.$cookies.set('color', color)
             },
 
             getColor () {
@@ -77,9 +90,26 @@
                 }
             },
 
+            saveTask(task)
+            {
+                const value = this.$refs[task.id][0].value
+
+                axios.post('/tasks/change/' + task.id, {
+                    task: value
+                });
+            },
+
             showAllTasks () {
                 this.allTasks = true
                 document.getElementById('allTasks').textContent = 'Alle taken'
+            },
+
+            deleteTask(task) {
+                axios.get('/tasks/delete/' + task.id).then(res => {
+                    if (res.status !== 200) return
+
+                    this.$refs["task-" + task.id][0].remove()
+                })
             },
 
             getSpecificTasks (list) {
@@ -113,7 +143,7 @@
             },
 
             isCompleted (task) {
-                return this.completedTasks.includes(task.id);
+                return this.completedTasks.includes(task.id)
             }
         }
     }

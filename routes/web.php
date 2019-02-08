@@ -13,6 +13,8 @@
 */
 
 Route::get('/', 'TasksController@index')->middleware('auth');
+Route::get('/task/create', 'TasksController@create')->middleware('auth');
+Route::get('/list/create', 'ListsController@create')->middleware('auth');
 
 // Route::get('/', function () {
 //     $tasks = App\ListModel::with('tasks')->get();
@@ -25,7 +27,11 @@ Route::get('/logout', 'AuthController@logout');
 
 // AJAX Routes
 Route::get('/user', 'AuthController@getUser');
-Route::get('/tasks/list/{list}', 'TasksController@getSpecificTasks');
+Route::get('/tasks/list/{list}', 'TasksController@getSpecificTasks')->middleware('auth');
+Route::post('/tasks/create', 'TasksController@store')->middleware('auth');
+Route::post('/lists/create', 'ListsController@store')->middleware('auth');
+Route::post('/tasks/change/{task}', 'TasksController@change')->middleware('auth');
+Route::get('/tasks/delete/{task}', 'TasksController@delete')->middleware('auth');
 
-Route::post('/tasks/{task}/check', 'TasksController@markTask');
+Route::post('/tasks/{task}/check', 'TasksController@markTask')->middleware('auth');
 Route::post('/login', 'AuthController@login');

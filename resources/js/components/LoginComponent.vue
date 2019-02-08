@@ -1,8 +1,8 @@
 <template>
     <div class="container max-w-lg mx-auto">
-        <div :class='"bg-" + getColor() + " flex text-white p-4 sm:mt-8 mt-0 font-semibold shadow border-t-4 sm:rounded-t rounded-none border-" + getColor() + "-dark"'>
+        <div :class='"bg-red flex text-white p-4 sm:mt-8 mt-0 font-semibold shadow border-t-4 sm:rounded-t rounded-none border-red-dark"'>
             <div class="flex-1 my-auto">Todo-list app</div>
-            <div :class='"justify-end text-sm bg-" + getColor() + "-dark px-3 py-2 rounded cursor-pointer"'>+ Taak toevoegen</div>
+            <div :class='"justify-end text-sm bg-red-dark px-3 py-2 rounded cursor-pointer"'>+ Taak toevoegen</div>
         </div>
         <div class="leading-normal sm:rounded-b rounded-none shadow">
             <div class="w-full w-1/2 p-6 text-sm bg-white sm:rounded-b rounded-none pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
@@ -14,24 +14,19 @@
                     <div class="mb-4 text-red text-sm font-semibold" v-if="authenticated === false">
                         Het e-mailadres of wachtwoord is ongeldig.
                     </div>
-                    <form>
-                        <input v-model="fields.email" class="mt-2 w-full block border py-2 px-2 rounded" type="email" name="email" placeholder="E-mailadres">
-                        <div :class='"text-" + getColor() + " font-semibold mt-2 mb-1 text-xs"' v-if="getError('email')" v-text="getError('email')"></div>
+                    <form @keyup.enter="submit">
+                        <input @keyup="errors.email = null" v-model="fields.email" class="mt-2 w-full block border py-2 px-2 rounded" type="email" name="email" placeholder="E-mailadres">
+                        <div :class='"text-red font-semibold mt-2 mb-1 text-xs"' v-if="getError('email')" v-text="getError('email')"></div>
 
-                        <input v-model="fields.password" class="mt-2 w-full block border py-2 px-2 rounded" type="password" name="password" placeholder="Wachtwoord">
-                        <div :class='"text-" + getColor() + " font-semibold mt-2 mb-1 text-xs"' v-if="getError('password')" v-text="getError('password')"></div>
+                        <input @keyup="errors.password = null" v-model="fields.password" class="mt-2 w-full block border py-2 px-2 rounded" type="password" name="password" placeholder="Wachtwoord">
+                        <div :class='"text-red font-semibold mt-2 mb-1 text-xs"' v-if="getError('password')" v-text="getError('password')"></div>
 
-                        <button @click="submit" :disabled="disabled" :class='"bg-" + getColor() + " text-white px-4 py-2 rounded font-semibold mt-4 mr-2 hover:bg-" + getColor() + "-dark"' type="button">Login</button>
+                        <button @click="submit" :disabled="disabled" :class='"bg-red text-white px-4 py-2 rounded font-semibold mt-4 mr-2 hover:bg-red-dark"' type="button">Login</button>
                         <button class="bg-grey-lighter text-grey-darker px-4 py-2 rounded font-semibold mt-4 hover:bg-grey-light" type="button">Registreren</button>
                     </form>
                 </div>
 
             </div>
-        </div>
-        <div class="flex justify-end sm:mr-0 mr-2">
-            <div @click="setColor('red')" class="bg-red p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer"></div>
-            <div @click="setColor('green')" class="bg-green p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer"></div>
-            <div @click="setColor('blue')" class="bg-blue p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer"></div>
         </div>
     </div>
 </template>
@@ -58,14 +53,6 @@ export default {
     },
 
     methods: {
-        setColor (color) {
-            this.color = color
-        },
-
-        getColor () {
-            return this.color
-        },
-
         getError (field) {
             return this.errors[field]
         },
@@ -92,10 +79,10 @@ export default {
                 }).then(response => {
                     if (!response.data.authenticated) {
                         this.authenticated = false
+                        this.disabled = false
                     } else {
                         this.authenticated = true
-
-                        window.location.href = '/';
+                        window.location.href = '/'
                     }
                 })
             }

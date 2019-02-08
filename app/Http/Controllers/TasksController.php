@@ -16,6 +16,54 @@ class TasksController extends Controller
         return view('index', compact('lists', 'tasks'));
     }
 
+    public function create()
+    {
+        $lists = auth()->user()->lists;
+
+        return view('tasks.create', compact('lists'));
+    }
+
+    public function store(Request $request)
+    {
+        if (!request()->ajax()) {
+            abort(404);
+        }
+
+        $request->validate([
+            'task' => 'required',
+            'list' => 'required'
+        ]);
+
+        $task = new TaskModel;
+        $task->body = $request->task;
+        $task->user_id = auth()->user()->id;
+        $task->list_id = $request->list;
+
+        $task->save();
+    }
+
+    public function change(Request $request, TaskModel $task)
+    {
+        $request->validate([
+            'task' => 'required'
+        ]);
+
+        $task->body = $request->task;
+
+        $task->save();
+    }
+
+    public function delete(TaskModel $task)
+    {
+        if (!request()->ajax()) {
+            abort(404);
+        }
+
+        $task->delete();
+
+        return auth()->user()->tasks;
+    }
+
     public function markTask(Request $request, TaskModel $task)
     {
         if (!request()->ajax()) {
