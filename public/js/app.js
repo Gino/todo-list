@@ -2198,6 +2198,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -38234,7 +38240,36 @@ var render = function() {
                   {
                     class: "text-center mt-3 text-" + _vm.getColor() + "-dark"
                   },
-                  [_vm._v("Er zijn geen taken beschikbaar.")]
+                  [
+                    _vm._v(
+                      "\n                Er zijn geen taken beschikbaar.\n\n                "
+                    ),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "no-underline",
+                        attrs: { href: "/task/create" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            class:
+                              "bg-" +
+                              _vm.getColor() +
+                              " text-white rounded p-2 shadow-inner cursor-pointer hover:bg-" +
+                              _vm.getColor() +
+                              "-dark font-semibold w-2/5 mx-auto mt-4"
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Maak je eerste taak aan\n                "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]
                 )
               : _vm._e(),
             _vm._v(" "),
