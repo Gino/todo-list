@@ -1978,7 +1978,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2093,6 +2092,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -2101,6 +2109,7 @@ __webpack_require__.r(__webpack_exports__);
       completedTasks: [],
       specificTasks: [],
       allTasks: true,
+      tasksData: this.tasks,
       user: null
     };
   },
@@ -2128,15 +2137,25 @@ __webpack_require__.r(__webpack_exports__);
     },
     getTasks: function getTasks() {
       if (this.allTasks) {
-        return this.tasks;
+        return this.tasksData;
       } else {
         return this.specificTasks;
       }
     },
+    getListFromTask: function getListFromTask(task) {
+      return this.lists.filter(function (list) {
+        return list.id === task.list_id;
+      })[0].name;
+    },
     saveTask: function saveTask(task) {
-      var value = this.$refs[task.id][0].value;
+      var _this2 = this;
+
+      var value = this.$refs[task.id][0].textContent;
+      if (value === null || value == '') return;
       axios.post('/tasks/change/' + task.id, {
         task: value
+      }).then(function (res) {
+        _this2.tasksData = res.data;
       });
     },
     showAllTasks: function showAllTasks() {
@@ -2144,39 +2163,48 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById('allTasks').textContent = 'Alle taken';
     },
     deleteTask: function deleteTask(task) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/tasks/delete/' + task.id).then(function (res) {
         if (res.status !== 200) return;
 
-        _this2.$refs["task-" + task.id][0].remove();
+        _this3.$refs["task-" + task.id][0].remove();
+      });
+    },
+    deleteList: function deleteList(list) {
+      var _this4 = this;
+
+      axios.get('/lists/delete/' + list.id).then(function (res) {
+        if (res.status !== 200) return;
+
+        _this4.$refs["list-" + list.id][0].remove();
       });
     },
     getSpecificTasks: function getSpecificTasks(list) {
-      var _this3 = this;
+      var _this5 = this;
 
       this.specificTasks = [];
       this.allTasks = false;
       axios.get('/tasks/list/' + list.id).then(function (res) {
         if (res.status !== 200) {
-          _this3.allTasks = true;
+          _this5.allTasks = true;
           return;
         }
 
         var tasks = res.data;
         tasks.forEach(function (task) {
-          _this3.specificTasks.push(task);
+          _this5.specificTasks.push(task);
         });
         document.getElementById('allTasks').textContent = list.name;
       });
     },
     markTask: function markTask(task) {
-      var _this4 = this;
+      var _this6 = this;
 
       axios.post('/tasks/' + task.id + '/check', {
         'task': task
       }).then(function (res) {
-        !_this4.isCompleted(task) ? _this4.completedTasks.push(task.id) : _this4.completedTasks.splice(_this4.completedTasks.indexOf(task.id), 1);
+        !_this6.isCompleted(task) ? _this6.completedTasks.push(task.id) : _this6.completedTasks.splice(_this6.completedTasks.indexOf(task.id), 1);
       }).catch(function (err) {
         console.error(err);
       });
@@ -37593,18 +37621,7 @@ var render = function() {
         class:
           "bg-red flex text-white p-4 sm:mt-8 mt-0 font-semibold shadow border-t-4 sm:rounded-t rounded-none border-red-dark"
       },
-      [
-        _c("div", { staticClass: "flex-1 my-auto" }, [_vm._v("Todo-list app")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            class:
-              "justify-end text-sm bg-red-dark px-3 py-2 rounded cursor-pointer"
-          },
-          [_vm._v("+ Taak toevoegen")]
-        )
-      ]
+      [_c("div", { staticClass: "flex-1 my-auto" }, [_vm._v("Todo-list app")])]
     ),
     _vm._v(" "),
     _c(
@@ -37619,7 +37636,7 @@ var render = function() {
             staticStyle: { "max-height": "390px", "min-height": "390px" }
           },
           [
-            _c("div", { staticClass: "w-1/2 mx-auto mt-12 mb-4" }, [
+            _c("div", { staticClass: "sm:w-1/2 w-full mx-auto mt-12 mb-4" }, [
               _c(
                 "div",
                 {
@@ -37871,6 +37888,8 @@ var render = function() {
                 "div",
                 {
                   key: list.id,
+                  ref: "list-" + list.id,
+                  refInFor: true,
                   staticClass: "list flex relative text-sm mb-2"
                 },
                 [
@@ -38017,18 +38036,23 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _c("input", {
-                    ref: task.id,
-                    refInFor: true,
-                    staticClass: "w-3/4 outline-none cursor-pointer",
-                    attrs: { type: "text" },
-                    domProps: { value: task.body },
-                    on: {
-                      change: function($event) {
-                        return _vm.saveTask(task)
-                      }
-                    }
-                  }),
+                  _c("div", { staticClass: "w-4/5" }, [
+                    _c(
+                      "div",
+                      {
+                        ref: task.id,
+                        refInFor: true,
+                        staticClass: "w-full outline-none cursor-pointer",
+                        attrs: { contenteditable: "" },
+                        on: {
+                          blur: function($event) {
+                            return _vm.saveTask(task)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(task.body))]
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
                     "div",

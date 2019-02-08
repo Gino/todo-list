@@ -27,4 +27,15 @@ class ListsController extends Controller
         $list->name = $request->list;
         $list->save();
     }
+
+    public function delete(ListModel $list)
+    {
+        if (!request()->ajax()) {
+            abort(404);
+        }
+
+        $list->delete();
+
+        return auth()->user()->lists;
+    }
 }

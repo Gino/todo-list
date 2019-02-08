@@ -2,12 +2,11 @@
     <div class="container max-w-lg mx-auto">
         <div :class='"bg-red flex text-white p-4 sm:mt-8 mt-0 font-semibold shadow border-t-4 sm:rounded-t rounded-none border-red-dark"'>
             <div class="flex-1 my-auto">Todo-list app</div>
-            <div :class='"justify-end text-sm bg-red-dark px-3 py-2 rounded cursor-pointer"'>+ Taak toevoegen</div>
         </div>
         <div class="leading-normal sm:rounded-b rounded-none shadow">
             <div class="w-full w-1/2 p-6 text-sm bg-white sm:rounded-b rounded-none pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
 
-                <div class="w-1/2 mx-auto mt-12 mb-4">
+                <div class="sm:w-1/2 w-full mx-auto mt-12 mb-4">
                     <div class="font-semibold mb-4 text-grey-darkest text-base">
                         Login
                     </div>

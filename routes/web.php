@@ -32,6 +32,7 @@ Route::post('/tasks/create', 'TasksController@store')->middleware('auth');
 Route::post('/lists/create', 'ListsController@store')->middleware('auth');
 Route::post('/tasks/change/{task}', 'TasksController@change')->middleware('auth');
 Route::get('/tasks/delete/{task}', 'TasksController@delete')->middleware('auth');
+Route::get('/lists/delete/{list}', 'ListsController@delete')->middleware('auth');
 
 Route::post('/tasks/{task}/check', 'TasksController@markTask')->middleware('auth');
 Route::post('/login', 'AuthController@login');

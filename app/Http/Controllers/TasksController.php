@@ -51,6 +51,8 @@ class TasksController extends Controller
         $task->body = $request->task;
 
         $task->save();
+
+        return auth()->user()->tasks;
     }
 
     public function delete(TaskModel $task)

@@ -17,7 +17,7 @@
                 <div v-if="!allTasks" @click="showAllTasks" class="font-semibold bg-grey-lighter text-grey-darkest cursor-pointer mb-4 text-sm rounded p-2">
                     Alle taken
                 </div>
-                <div v-for="list in lists" :key="list.id" class="list flex relative text-sm mb-2">
+                <div v-for="list in lists" :ref='"list-" + list.id' :key="list.id" class="list flex relative text-sm mb-2">
                     <span @click="getSpecificTasks(list)" :class='"text-" + getColor() + " cursor-pointer hover:underline"'>{{ list.name }}</span>
                     <div :class='"bg-" + getColor() + "-light hover:bg-" + getColor() + " delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
                         <div @click="deleteList(list)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">-</div>
@@ -31,7 +31,16 @@
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">
                         <svg v-if="isCompleted(task)" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1px; left: 23%; top: 27%" class="absolute fill-current" height="10px" width="10px" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                     </div>
-                    <input @change="saveTask(task)" :ref='task.id' class="w-3/4 outline-none cursor-pointer" type="text" :value='task.body'>
+                    <div class="w-4/5">
+                        <div @blur="saveTask(task)" :ref='task.id' class="w-full outline-none cursor-pointer" contenteditable>{{ task.body }}</div>
+                    </div>
+
+                    <!-- List changer -->
+                    <!-- <div class="text-xs my-auto bg-grey-lighter font-semibold text-grey-dark px-1 -ml-8 rounded">
+                        {{ getListFromTask(task) }}
+                    </div> -->
+
+                    <!-- Delete button -->
                     <div :class='"bg-" + getColor() + "-light hover:bg-" + getColor() + " delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
                         <div @click="deleteTask(task)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">-</div>
                     </div>
@@ -39,9 +48,9 @@
             </div>
         </div>
         <div class="flex justify-end sm:mr-0 mr-2">
-            <div @click="setColor('red')" class="bg-red p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer"></div>
-            <div @click="setColor('green')" class="bg-green p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer"></div>
-            <div @click="setColor('blue')" class="bg-blue p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer"></div>
+            <div @click="setColor('red')" class="bg-red p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer" />
+            <div @click="setColor('green')" class="bg-green p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer" />
+            <div @click="setColor('blue')" class="bg-blue p-2 rounded-full mt-4 ml-2 border-white shadow border cursor-pointer" />
         </div>
     </div>
 </template>
@@ -56,6 +65,7 @@
                 completedTasks: [],
                 specificTasks: [],
                 allTasks: true,
+                tasksData: this.tasks,
                 user: null
             }
         },
@@ -89,18 +99,28 @@
 
             getTasks () {
                 if (this.allTasks) {
-                    return this.tasks
+                    return this.tasksData
                 } else {
                     return this.specificTasks
                 }
             },
 
+            getListFromTask(task)
+            {
+                return this.lists.filter(list => {
+                    return list.id === task.list_id
+                })[0].name
+            },
+
             saveTask(task)
             {
-                const value = this.$refs[task.id][0].value
+                const value = this.$refs[task.id][0].textContent
 
+                if (value === null || value == '') return
                 axios.post('/tasks/change/' + task.id, {
                     task: value
+                }).then(res => {
+                    this.tasksData = res.data
                 });
             },
 
@@ -114,6 +134,14 @@
                     if (res.status !== 200) return
 
                     this.$refs["task-" + task.id][0].remove()
+                })
+            },
+
+            deleteList(list) {
+                axios.get('/lists/delete/' + list.id).then(res => {
+                    if (res.status !== 200) return
+
+                    this.$refs["list-" + list.id][0].remove()
                 })
             },
 

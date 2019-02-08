@@ -6191,7 +6191,16 @@ table {
   transition: opacity .05s ease-in;
 }
 
+.task .list {
+  opacity: 0;
+  transition: opacity .05s ease-in;
+}
+
 .task:hover .delete {
+  opacity: 1 !important;
+}
+
+.task:hover .list {
   opacity: 1 !important;
 }
 
