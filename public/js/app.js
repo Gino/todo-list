@@ -1999,6 +1999,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2006,6 +2007,7 @@ __webpack_require__.r(__webpack_exports__);
       register: false,
       authenticated: null,
       disabled: false,
+      status: null,
       fields: {
         name: null,
         email: null,
@@ -2025,6 +2027,8 @@ __webpack_require__.r(__webpack_exports__);
       return this.errors[field];
     },
     submitRegistration: function submitRegistration() {
+      var _this = this;
+
       this.errors.name = null;
       this.errors.email = null;
       this.errors.password = null;
@@ -2055,14 +2059,16 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/register', {
           'name': this.fields.name,
           'email': this.fields.email,
-          'password': this.fields.password
+          'password': this.fields.password,
+          'password_confirmation': this.fields.password_confirmation
         }).then(function (response) {
-          window.location.href = '/login';
+          _this.register = false;
+          _this.status = "Je account is aangemaakt, je kan hier inloggen.";
         });
       }
     },
     submit: function submit() {
-      var _this = this;
+      var _this2 = this;
 
       this.errors.email = null;
       this.errors.password = null;
@@ -2084,10 +2090,10 @@ __webpack_require__.r(__webpack_exports__);
           'password': this.fields.password
         }).then(function (response) {
           if (!response.data.authenticated) {
-            _this.authenticated = false;
-            _this.disabled = false;
+            _this2.authenticated = false;
+            _this2.disabled = false;
           } else {
-            _this.authenticated = true;
+            _this2.authenticated = true;
             window.location.href = '/';
           }
         });
@@ -37870,6 +37876,14 @@ var render = function() {
                       },
                       [_vm._v("\n                    Login\n                ")]
                     ),
+                    _vm._v(" "),
+                    _vm.status
+                      ? _c("div", {
+                          staticClass:
+                            "bg-green text-white rounded p-3 font-semibold text-xs mt-2 mb-4",
+                          domProps: { textContent: _vm._s(_vm.status) }
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     _vm.authenticated === false
                       ? _c(

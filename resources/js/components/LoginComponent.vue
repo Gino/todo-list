@@ -10,6 +10,7 @@
                     <div class="font-semibold mb-4 text-grey-darkest text-base">
                         Login
                     </div>
+                    <div v-if="status" class="bg-green text-white rounded p-3 font-semibold text-xs mt-2 mb-4" v-text="status"></div>
                     <div class="mb-4 text-red text-sm font-semibold" v-if="authenticated === false">
                         Het e-mailadres of wachtwoord is ongeldig.
                     </div>
@@ -60,6 +61,7 @@ export default {
             register: false,
             authenticated: null,
             disabled: false,
+            status: null,
 
             fields: {
                 name: null,
@@ -113,9 +115,11 @@ export default {
                 axios.post('/register', {
                     'name': this.fields.name,
                     'email': this.fields.email,
-                    'password': this.fields.password
+                    'password': this.fields.password,
+                    'password_confirmation': this.fields.password_confirmation
                 }).then(response => {
-                    window.location.href = '/login'
+                    this.register = false
+                    this.status = "Je account is aangemaakt, je kan hier inloggen."
                 })
             }
         },
