@@ -110,7 +110,7 @@ class TasksController extends Controller
             if (auth()->user()->role->name === 'Administrator') {
                 $tasks = $list->tasks;
             } else {
-                $tasks = $list->tasks->where('user_id', 1);
+                $tasks = $list->tasks->where('user_id', auth()->user()->id);
             }
         } else {
             return [];
