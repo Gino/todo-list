@@ -12,3 +12,7 @@
 
 ## Trello
 https://trello.com/b/hqhspEbB/stemwijzer-todo-list
+
+## Information
+- Built in Laravel 5.7.25
+- Contains Vue 2.6.3
