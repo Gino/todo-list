@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -14,14 +16,29 @@ class AuthController extends Controller
 
     public function getUser(Request $request)
     {
-        // if ($request->ajax()) {
-        return response()->json([
-            'user' => auth()->user(),
-            'role' => auth()->user()->role->name
-        ]);
-        // } else {
-        //     abort(404);
-        // }
+        if ($request->ajax()) {
+            return response()->json([
+                'user' => auth()->user(),
+                'role' => auth()->user()->role->name
+            ]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function getUsers(Request $request)
+    {
+        if (auth()->user()->role->name !== 'Administrator') {
+            return abort(403);
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'users' => User::with('role')->get(),
+            ]);
+        } else {
+            abort(404);
+        }
     }
 
     public function login(Request $request)
@@ -41,6 +58,27 @@ class AuthController extends Controller
                     'authenticated' => false
                 ]);
             }
+        }
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name'     => 'required',
+            'email'    => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($request->ajax()) {
+            $u = new User;
+
+            $u->name = $request->name;
+            $u->email = $request->email;
+            $u->password = Hash::make($request->password);
+
+            $u->save();
+        } else {
+            abort(404);
         }
     }
 

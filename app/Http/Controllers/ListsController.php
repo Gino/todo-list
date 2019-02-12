@@ -38,4 +38,17 @@ class ListsController extends Controller
 
         return auth()->user()->lists;
     }
+
+    public function change(Request $request, ListModel $list)
+    {
+        $request->validate([
+            'list' => 'required'
+        ]);
+
+        $list->name = $request->list;
+
+        $list->save();
+
+        return auth()->user()->lists;
+    }
 }

@@ -10,8 +10,13 @@ class TasksController extends Controller
 {
     public function index(ListModel $lists, TaskModel $tasks)
     {
-        $lists = auth()->user()->lists;
-        $tasks = auth()->user()->tasks;
+        if (auth()->user()->role->name === 'Administrator') {
+            $lists = ListModel::all();
+            $tasks = TaskModel::with('user')->get();
+        } elseif (auth()->user()->role->name === 'Gebruiker') {
+            $lists = auth()->user()->lists;
+            $tasks = auth()->user()->tasks;
+        }
 
         return view('tasks.index', compact('lists', 'tasks'));
     }
@@ -52,7 +57,13 @@ class TasksController extends Controller
 
         $task->save();
 
-        return auth()->user()->tasks;
+        if (auth()->user()->role->name === 'Administrator') {
+            $tasks = TaskModel::with('user')->get();
+        } elseif (auth()->user()->role->name === 'Gebruiker') {
+            $tasks = auth()->user()->tasks;
+        }
+
+        return $tasks;
     }
 
     public function delete(TaskModel $task)
@@ -63,7 +74,13 @@ class TasksController extends Controller
 
         $task->delete();
 
-        return auth()->user()->tasks;
+        if (auth()->user()->role->name === 'Administrator') {
+            $tasks = TaskModel::with('user')->get();
+        } elseif (auth()->user()->role->name === 'Gebruiker') {
+            $tasks = auth()->user()->tasks;
+        }
+
+        return $tasks;
     }
 
     public function markTask(Request $request, TaskModel $task)
@@ -88,17 +105,17 @@ class TasksController extends Controller
         }
         $list = ListModel::find($list);
 
-        if ($list->user_id !== auth()->user()->id) {
+
+        if (count($list) > 0) {
+            if (auth()->user()->role->name === 'Administrator') {
+                $tasks = $list->tasks;
+            } else {
+                $tasks = $list->tasks->where('user_id', 1);
+            }
+        } else {
             return [];
         }
 
-        $tasks = $list->tasks;
-
-        foreach ($tasks as $task) {
-            if ($task->user_id !== auth()->user()->id) {
-                return [];
-            }
-        }
 
         return $tasks;
     }

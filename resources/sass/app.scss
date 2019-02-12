@@ -82,13 +82,20 @@
       }
   }
 
-  .list {
+.list {
     .delete {
+        opacity: 0;
+        transition: opacity .05s ease-in;
+    }
+    .change {
         opacity: 0;
         transition: opacity .05s ease-in;
     }
     &:hover {
         .delete {
+            opacity: 1 !important;
+        }
+        .change {
             opacity: 1 !important;
         }
     }

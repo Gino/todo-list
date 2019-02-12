@@ -6209,7 +6209,16 @@ table {
   transition: opacity .05s ease-in;
 }
 
+.list .change {
+  opacity: 0;
+  transition: opacity .05s ease-in;
+}
+
 .list:hover .delete {
+  opacity: 1 !important;
+}
+
+.list:hover .change {
   opacity: 1 !important;
 }
 

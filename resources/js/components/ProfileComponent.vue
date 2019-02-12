@@ -16,6 +16,20 @@
 
                 <div class="mt-4 font-semibold text-grey-darkest">Profile aangemaakt op</div>
                 <input type="email" :value="getCreatedAtDate()" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
+
+                <div v-if="user.role.name === 'Administrator'" class="mt-8 font-semibold text-grey-darkest">Alle gebruikers</div>
+                <table v-if="user.role.name === 'Administrator'" class="leading-normal mt-2 w-full text-grey-darker">
+                    <tr>
+                        <th class="text-left">#</th>
+                        <th class="text-left">Naam</th>
+                        <th class="text-left">Rol</th>
+                    </tr>
+                    <tr class="text-black" v-for="user in users" :key="user.id">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.role.name }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div class="flex justify-end sm:mr-0 mr-2">
@@ -36,7 +50,8 @@ export default {
                 role: {
                     name: null
                 }
-            }
+            },
+            users: null
         }
     },
 
@@ -47,6 +62,14 @@ export default {
             if (response.status !== 200) return
 
             this.user = response.data.user
+
+            if (this.user.role.name === 'Administrator') {
+                axios.get('/users').then(response => {
+                    if (response.status !== 200) return
+
+                    this.users = response.data.users
+                })
+            }
         })
     },
 
