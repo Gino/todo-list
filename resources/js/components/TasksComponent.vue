@@ -138,6 +138,9 @@
                     list: value
                 }).then(res => {
                     this.listsData = res.data
+
+                    let element = this.$refs['listName-' + this.currentList.id]
+                    element.contentEditable = false
                 });
             },
 

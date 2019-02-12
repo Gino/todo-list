@@ -2360,6 +2360,8 @@ __webpack_require__.r(__webpack_exports__);
         list: value
       }).then(function (res) {
         _this2.listsData = res.data;
+        var element = _this2.$refs['listName-' + _this2.currentList.id];
+        element.contentEditable = false;
       });
     },
     getListFromTask: function getListFromTask(task) {
