@@ -2314,7 +2314,7 @@ __webpack_require__.r(__webpack_exports__);
       allTasks: true,
       tasksData: this.tasks,
       listsData: this.lists,
-      user: ''
+      user: null
     };
   },
   mounted: function mounted() {

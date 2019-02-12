@@ -85,7 +85,7 @@
                 allTasks: true,
                 tasksData: this.tasks,
                 listsData: this.lists,
-                user: ''
+                user: null
             }
         },
 
