@@ -2064,6 +2064,9 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this.register = false;
           _this.status = "Je account is aangemaakt, je kan hier inloggen.";
+          _this.disabled = false;
+          _this.fields.email = null;
+          _this.fields.password = null;
         });
       }
     },

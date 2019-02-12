@@ -120,6 +120,9 @@ export default {
                 }).then(response => {
                     this.register = false
                     this.status = "Je account is aangemaakt, je kan hier inloggen."
+                    this.disabled = false
+                    this.fields.email = null
+                    this.fields.password = null
                 })
             }
         },
