@@ -21,11 +21,11 @@ class TasksController extends Controller
         return view('tasks.index', compact('lists', 'tasks'));
     }
 
-    public function create()
+    public function create($list = null)
     {
         $lists = auth()->user()->lists;
 
-        return view('tasks.create', compact('lists'));
+        return view('tasks.create', compact('lists', 'list'));
     }
 
     public function store(Request $request)

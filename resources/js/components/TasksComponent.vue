@@ -33,7 +33,7 @@
                     </div>
 
                     <div :class='"bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
-                        <a class="no-underline" href="/task/create"><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
+                        <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
                     </div>
                 </div>
                 <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>
@@ -85,7 +85,9 @@
                 allTasks: true,
                 tasksData: this.tasks,
                 listsData: this.lists,
-                user: null
+                user: {
+                    id: null
+                }
             }
         },
 

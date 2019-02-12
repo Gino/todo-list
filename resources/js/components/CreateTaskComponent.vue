@@ -38,6 +38,7 @@ export default {
         return {
             color: 'red',
 
+            currentList: null,
             disabled: false,
 
             fields: {
@@ -54,6 +55,13 @@ export default {
 
     mounted () {
         this.color = this.$cookies.isKey('color') ? this.$cookies.get('color') : 'red'
+
+        const id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+        if (id !== '') {
+            this.fields.list = id
+        } else {
+            this.fields.list = 'select'
+        }
     },
 
     methods: {

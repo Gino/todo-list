@@ -1884,6 +1884,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       color: 'red',
+      currentList: null,
       disabled: false,
       fields: {
         task: null,
@@ -1897,6 +1898,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.color = this.$cookies.isKey('color') ? this.$cookies.get('color') : 'red';
+    var id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+
+    if (id !== '') {
+      this.fields.list = id;
+    } else {
+      this.fields.list = 'select';
+    }
   },
   methods: {
     setColor: function setColor(color) {
@@ -2314,7 +2322,9 @@ __webpack_require__.r(__webpack_exports__);
       allTasks: true,
       tasksData: this.tasks,
       listsData: this.lists,
-      user: null
+      user: {
+        id: null
+      }
     };
   },
   mounted: function mounted() {
@@ -38733,7 +38743,37 @@ var render = function() {
                         class:
                           "bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"
                       },
-                      [_vm._m(1)]
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "no-underline",
+                            attrs: {
+                              href:
+                                "/task/create/" +
+                                (_vm.currentList.id !== undefined
+                                  ? _vm.currentList.id
+                                  : "")
+                            }
+                          },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "my-auto font-bold text-white absolute",
+                                staticStyle: {
+                                  bottom: "0",
+                                  top: "-29%",
+                                  left: "0",
+                                  right: "0"
+                                }
+                              },
+                              [_vm._v("+")]
+                            )
+                          ]
+                        )
+                      ]
                     )
                   ]
                 )
@@ -38943,25 +38983,6 @@ var staticRenderFns = [
     return _c(
       "a",
       { staticClass: "no-underline", attrs: { href: "/list/create" } },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "my-auto font-bold text-white absolute",
-            staticStyle: { bottom: "0", top: "-29%", left: "0", right: "0" }
-          },
-          [_vm._v("+")]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      { staticClass: "no-underline", attrs: { href: "/task/create" } },
       [
         _c(
           "div",
