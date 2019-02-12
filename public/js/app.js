@@ -2008,6 +2008,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2365,7 +2366,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var value = this.$refs['listName-' + this.currentList.id].textContent;
-      if (value === null || value == '') return;
+      if (value === null || value == '' || value === this.currentList.name) return;
       axios.post('/lists/change/' + this.currentList.id, {
         list: value
       }).then(function (res) {
@@ -2383,7 +2384,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       var value = this.$refs[task.id][0].textContent;
-      if (value === null || value == '') return;
+      if (value === null || value == '' || value === task.body) return;
       axios.post('/tasks/change/' + task.id, {
         task: value
       }).then(function (res) {
@@ -38264,6 +38265,21 @@ var render = function() {
                             on: { click: _vm.submitRegistration }
                           },
                           [_vm._v("Registreer")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "bg-grey-lighter text-grey-darker px-4 py-2 rounded font-semibold mt-4 hover:bg-grey-light",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.register = false
+                              }
+                            }
+                          },
+                          [_vm._v("Login")]
                         )
                       ]
                     )

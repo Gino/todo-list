@@ -44,6 +44,7 @@
                         <div :class='"text-red font-semibold mt-2 mb-1 text-xs"' v-if="getError('password_confirmation')" v-text="getError('password_confirmation')"></div>
 
                         <button @click="submitRegistration" :disabled="disabled" :class='"bg-red text-white px-4 py-2 rounded font-semibold mt-4 mr-2 hover:bg-red-dark"' type="button">Registreer</button>
+                        <button @click="register = false" class="bg-grey-lighter text-grey-darker px-4 py-2 rounded font-semibold mt-4 hover:bg-grey-light" type="button">Login</button>
                     </form>
                 </div>
 

@@ -135,7 +135,8 @@
             saveList() {
                 const value = this.$refs['listName-' + this.currentList.id].textContent
 
-                if (value === null || value == '') return
+                if (value === null || value == '' || value === this.currentList.name) return
+
                 axios.post('/lists/change/' + this.currentList.id, {
                     list: value
                 }).then(res => {
@@ -157,7 +158,7 @@
             {
                 const value = this.$refs[task.id][0].textContent
 
-                if (value === null || value == '') return
+                if (value === null || value == '' || value === task.body) return
                 axios.post('/tasks/change/' + task.id, {
                     task: value
                 }).then(res => {

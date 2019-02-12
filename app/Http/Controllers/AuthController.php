@@ -84,12 +84,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        if (auth()->user()) {
-            Auth::logout();
+        Auth::logout();
 
-            return redirect()->route('login');
-        } else {
-            abort(404);
-        }
+        return redirect()->route('login');
     }
 }

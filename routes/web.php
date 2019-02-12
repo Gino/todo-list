@@ -12,26 +12,27 @@
 |
 */
 
-Route::get('/', 'TasksController@index')->middleware('auth');
-Route::get('/profile', 'ProfileController@index')->middleware('auth');
-Route::get('/task/create/{list?}', 'TasksController@create')->middleware('auth');
-Route::get('/list/create', 'ListsController@create')->middleware('auth');
-
-Route::get('/login', 'AuthController@index')->middleware('guest')->name('login');
-
-// AJAX Routes
 Route::get('/user', 'AuthController@getUser');
 Route::get('/users', 'AuthController@getUsers');
-Route::get('/tasks/list/{list}', 'TasksController@getSpecificTasks')->middleware('auth');
-Route::post('/tasks/create', 'TasksController@store')->middleware('auth');
-Route::post('/lists/create', 'ListsController@store')->middleware('auth');
-Route::post('/tasks/change/{task}', 'TasksController@change')->middleware('auth');
-Route::post('/lists/change/{list}', 'ListsController@change')->middleware('auth');
-Route::get('/tasks/delete/{task}', 'TasksController@delete')->middleware('auth');
-Route::get('/lists/delete/{list}', 'ListsController@delete')->middleware('auth');
-Route::post('/tasks/{task}/check', 'TasksController@markTask')->middleware('auth');
+Route::get('/login', 'AuthController@index')->middleware('guest')->name('login');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', 'TasksController@index');
+    Route::get('/profile', 'ProfileController@index');
+    Route::get('/task/create/{list?}', 'TasksController@create');
+    Route::get('/list/create', 'ListsController@create');
+
+    // AJAX Routes
+    Route::get('/tasks/list/{list}', 'TasksController@getSpecificTasks');
+    Route::post('/tasks/create', 'TasksController@store');
+    Route::post('/lists/create', 'ListsController@store');
+    Route::post('/tasks/change/{task}', 'TasksController@change');
+    Route::post('/lists/change/{list}', 'ListsController@change');
+    Route::get('/tasks/delete/{task}', 'TasksController@delete');
+    Route::get('/lists/delete/{list}', 'ListsController@delete');
+    Route::post('/tasks/{task}/check', 'TasksController@markTask');
+    Route::get('/logout', 'AuthController@logout');
+});
+
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
-Route::get('/logout', 'AuthController@logout');
-
-// Todo: create admin area where you can see tasks of other people too when you're an administrator
