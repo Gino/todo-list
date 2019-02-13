@@ -11,7 +11,7 @@
                     Lijsten
 
                     <div :class='"bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
-                        <a class="no-underline" href="/list/create"><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
+                        <a class="no-underline" href="/list/create"><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto select-none font-bold text-white absolute">+</div></a>
                     </div>
                 </div>
                 <div v-if="!allTasks" @click="showAllTasks" class="font-semibold bg-grey-lighter text-grey-darkest cursor-pointer mb-4 text-sm rounded p-2">
@@ -22,7 +22,7 @@
                     <span @click="getSpecificTasks(list)" :class='"text-" + getColor() + " cursor-pointer hover:underline"'>{{ list.name }}</span>
                     <div class="ml-1 text-xs my-auto text-grey-darker" v-if="list.user_id !== user.id">(Not yours)</div>
                     <div :class='"bg-red-light hover:bg-red delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
-                        <div @click="deleteList(list)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">-</div>
+                        <div @click="deleteList(list)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto select-none font-bold text-white absolute">-</div>
                     </div>
                 </div>
             </div>
@@ -34,11 +34,11 @@
                     </div>
 
                     <div :class='"bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
-                        <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
+                        <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto select-none font-bold text-white absolute">+</div></a>
                     </div>
 
                     <!-- Sort -->
-                    <div class="text-grey cursor-pointer ml-2" @click="sortTasks">
+                    <div class="text-grey-dark select-none cursor-pointer ml-2" @click="sortTasks">
                         <div v-if="sort === false || sort === null" class="w-3 h-3">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="fill-current"><path d="M4.702 116.686l79.984-80.002c6.248-6.247 16.383-6.245 22.627 0l79.981 80.002c10.07 10.07 2.899 27.314-11.314 27.314H128v320c0 8.837-7.163 16-16 16H80c-8.837 0-16-7.163-16-16V144H16.016c-14.241 0-21.363-17.264-11.314-27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"></path></svg>
                         </div>
@@ -64,7 +64,7 @@
                         Maak je eerste taak aan
                     </div></a>
                 </div>
-                <div v-for="task in getTasks()" :ref='"task-" + task.id' :key="task.id" class="task relative flex border-b pb-3 mb-6">
+                <div v-for="task in getTasks" :ref='"task-" + task.id' :key="task.id" class="task relative flex border-b pb-3 mb-6">
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">
                         <svg v-if="isCompleted(task)" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1px; left: 23%; top: 27%" class="absolute fill-current" height="10px" width="10px" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                     </div>
@@ -75,7 +75,7 @@
 
                     <!-- Delete button -->
                     <div :class='"bg-red-light hover:bg-red delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
-                        <div @click="deleteTask(task)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto font-bold text-white absolute">-</div>
+                        <div @click="deleteTask(task)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto select-none font-bold text-white absolute">-</div>
                     </div>
                 </div>
             </div>
@@ -96,6 +96,7 @@
             return {
                 color: 'red',
                 currentList: '',
+                wait: false,
                 completedTasks: [],
                 specificTasks: [],
                 allTasks: true,
@@ -125,49 +126,29 @@
             })
         },
 
-        methods: {
-            setColor (color) {
-                this.color = color
-
-                this.$cookies.set('color', color)
-            },
-
-            getColor () {
-                return this.color
-            },
-
-            sortTasks () {
-                this.sort = !this.sort
-            },
-
-            filterMethod () {
-                if (this.filter === 'all' && this.sort !== null) {
-                    this.sort === null
-                }
-            },
-
+        computed: {
             getTasks () {
                 if (this.filter === 'all') {
                     if (this.allTasks) {
-                        if (this.sort) {
-                            return this.tasksData.sort((taskA, taskB) => {
-                                return taskA.completed - taskB.completed
+                        if (this.sort === true) {
+                            this.tasksData.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
                             })
                         } else if (this.sort === false) {
-                            return this.tasksData.sort((taskA, taskB) => {
-                                return taskB.completed - taskA.completed
+                            this.tasksData.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
                             })
                         }
 
                         return this.tasksData
                     } else {
-                        if (this.sort) {
+                        if (this.sort === true) {
                             return this.specificTasks.sort((taskA, taskB) => {
-                                return taskA.completed - taskB.completed
+                                return taskB.completed - taskA.completed
                             })
                         } else if (this.sort === false) {
                             return this.specificTasks.sort((taskA, taskB) => {
-                                return taskB.completed - taskA.completed
+                                return taskA.completed - taskB.completed
                             })
                         }
 
@@ -187,6 +168,28 @@
                     }) : this.specificTasks.filter(task => {
                         return task.completed === 1
                     })
+                }
+            }
+        },
+
+        methods: {
+            setColor (color) {
+                this.color = color
+
+                this.$cookies.set('color', color)
+            },
+
+            getColor () {
+                return this.color
+            },
+
+            sortTasks () {
+                this.sort = !this.sort
+            },
+
+            filterMethod () {
+                if (this.filter === 'all' && this.sort !== null) {
+                    this.sort = null
                 }
             },
 

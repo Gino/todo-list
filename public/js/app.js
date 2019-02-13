@@ -2334,6 +2334,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       color: 'red',
       currentList: '',
+      wait: false,
       completedTasks: [],
       specificTasks: [],
       allTasks: true,
@@ -2360,44 +2361,29 @@ __webpack_require__.r(__webpack_exports__);
       _this.user = response.data.user;
     });
   },
-  methods: {
-    setColor: function setColor(color) {
-      this.color = color;
-      this.$cookies.set('color', color);
-    },
-    getColor: function getColor() {
-      return this.color;
-    },
-    sortTasks: function sortTasks() {
-      this.sort = !this.sort;
-    },
-    filterMethod: function filterMethod() {
-      if (this.filter === 'all' && this.sort !== null) {
-        this.sort === null;
-      }
-    },
+  computed: {
     getTasks: function getTasks() {
       if (this.filter === 'all') {
         if (this.allTasks) {
-          if (this.sort) {
-            return this.tasksData.sort(function (taskA, taskB) {
-              return taskA.completed - taskB.completed;
+          if (this.sort === true) {
+            this.tasksData.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
             });
           } else if (this.sort === false) {
-            return this.tasksData.sort(function (taskA, taskB) {
-              return taskB.completed - taskA.completed;
+            this.tasksData.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
             });
           }
 
           return this.tasksData;
         } else {
-          if (this.sort) {
+          if (this.sort === true) {
             return this.specificTasks.sort(function (taskA, taskB) {
-              return taskA.completed - taskB.completed;
+              return taskB.completed - taskA.completed;
             });
           } else if (this.sort === false) {
             return this.specificTasks.sort(function (taskA, taskB) {
-              return taskB.completed - taskA.completed;
+              return taskA.completed - taskB.completed;
             });
           }
 
@@ -2417,6 +2403,23 @@ __webpack_require__.r(__webpack_exports__);
         }) : this.specificTasks.filter(function (task) {
           return task.completed === 1;
         });
+      }
+    }
+  },
+  methods: {
+    setColor: function setColor(color) {
+      this.color = color;
+      this.$cookies.set('color', color);
+    },
+    getColor: function getColor() {
+      return this.color;
+    },
+    sortTasks: function sortTasks() {
+      this.sort = !this.sort;
+    },
+    filterMethod: function filterMethod() {
+      if (this.filter === 'all' && this.sort !== null) {
+        this.sort = null;
       }
     },
     editList: function editList() {
@@ -38725,7 +38728,8 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "my-auto font-bold text-white absolute",
+                          staticClass:
+                            "my-auto select-none font-bold text-white absolute",
                           staticStyle: {
                             bottom: "0",
                             top: "-25%",
@@ -38855,7 +38859,7 @@ var render = function() {
                               "div",
                               {
                                 staticClass:
-                                  "my-auto font-bold text-white absolute",
+                                  "my-auto select-none font-bold text-white absolute",
                                 staticStyle: {
                                   bottom: "0",
                                   top: "-29%",
@@ -38873,7 +38877,8 @@ var render = function() {
                     _c(
                       "div",
                       {
-                        staticClass: "text-grey cursor-pointer ml-2",
+                        staticClass:
+                          "text-grey-dark select-none cursor-pointer ml-2",
                         on: { click: _vm.sortTasks }
                       },
                       [
@@ -39031,7 +39036,7 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            _vm._l(_vm.getTasks(), function(task) {
+            _vm._l(_vm.getTasks, function(task) {
               return _c(
                 "div",
                 {
@@ -39129,7 +39134,8 @@ var render = function() {
                       _c(
                         "div",
                         {
-                          staticClass: "my-auto font-bold text-white absolute",
+                          staticClass:
+                            "my-auto select-none font-bold text-white absolute",
                           staticStyle: {
                             bottom: "0",
                             top: "-25%",
@@ -39200,7 +39206,7 @@ var staticRenderFns = [
         _c(
           "div",
           {
-            staticClass: "my-auto font-bold text-white absolute",
+            staticClass: "my-auto select-none font-bold text-white absolute",
             staticStyle: { bottom: "0", top: "-29%", left: "0", right: "0" }
           },
           [_vm._v("+")]
