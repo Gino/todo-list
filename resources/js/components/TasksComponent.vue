@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="sm:w-3/4 w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-8 overflow-y-auto" style="max-height: 390px; min-height: 390px">
-                <div v-if="tasks.length > 0" class="list font-semibold relative flex text-grey-darkest text-base mb-6">
+                <div :class='(tasksData.length > 0 ? "flex" : "hidden") + " list font-semibold relative text-grey-darkest text-base mb-6"'>
                     <div class="outline-none" id="allTasks" @blur="saveList" :ref="'listName-' + currentList.id">Alle taken</div>
                     <div @click="editList" v-if="!allTasks" class="change h-4 w-4 bg-grey-light rounded-full relative my-auto ml-2 cursor-pointer">
                         <svg class="text-white absolute fill-current" style="top: 17%; left: 19%" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="10" height="10" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g><path  d="M422.953,176.019c0.549-0.48,1.09-0.975,1.612-1.498l21.772-21.772c12.883-12.883,12.883-33.771,0-46.654l-40.434-40.434c-12.883-12.883-33.771-12.883-46.653,0l-21.772,21.772c-0.523,0.523-1.018,1.064-1.498,1.613L422.953,176.019z"/><polygon points="114.317,397.684 157.317,440.684 106.658,448.342 56,456 63.658,405.341 71.316,354.683 	"/><polygon points="349.143,125.535 118.982,355.694 106.541,343.253 336.701,113.094 324.26,100.653 81.659,343.253 168.747,430.341 411.348,187.74 	"/></g></svg>
@@ -57,7 +57,7 @@
                         </select>
                      </div>
                 </div>
-                <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>
+                <div v-if="!tasksData.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>
                     Er zijn geen taken beschikbaar.
 
                     <a class="no-underline" href="/task/create"><div :class='"bg-" + getColor() + " text-white rounded p-2 shadow-inner cursor-pointer hover:bg-" + getColor() + "-dark font-semibold w-2/5 mx-auto mt-4"'>
@@ -239,10 +239,14 @@
             },
 
             deleteTask(task) {
+                const taskArray = this.tasksData.find(taskA => {
+                    return taskA.id === task.id
+                })
+
+                this.tasksData.splice(taskArray, 1)
+
                 axios.get('/tasks/delete/' + task.id).then(res => {
                     if (res.status !== 200) return
-
-                    this.$refs["task-" + task.id][0].remove()
                 })
             },
 

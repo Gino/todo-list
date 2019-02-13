@@ -13,11 +13,11 @@ class TaskModel extends Model
 
     public function list()
     {
-        return $this->belongsTo('App\ListModel', 'task_id');
+        return $this->belongsTo('App\ListModel');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\User');
     }
 }

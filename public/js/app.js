@@ -2461,60 +2461,60 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById('allTasks').textContent = 'Alle taken';
     },
     deleteTask: function deleteTask(task) {
-      var _this4 = this;
-
+      var taskArray = this.tasksData.find(function (taskA) {
+        return taskA.id === task.id;
+      });
+      this.tasksData.splice(taskArray, 1);
       axios.get('/tasks/delete/' + task.id).then(function (res) {
         if (res.status !== 200) return;
-
-        _this4.$refs["task-" + task.id][0].remove();
       });
     },
     deleteList: function deleteList(list) {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get('/lists/delete/' + list.id).then(function (res) {
         if (res.status !== 200) return;
 
-        _this5.$refs["list-" + list.id][0].remove();
+        _this4.$refs["list-" + list.id][0].remove();
       });
     },
     getSpecificTasks: function getSpecificTasks(list) {
-      var _this6 = this;
+      var _this5 = this;
 
       this.specificTasks = [];
       this.allTasks = false;
       axios.get('/tasks/list/' + list.id).then(function (res) {
         if (res.status !== 200) {
-          _this6.allTasks = true;
+          _this5.allTasks = true;
           return;
         }
 
         var tasks = res.data;
         tasks.forEach(function (task) {
-          _this6.specificTasks.push(task);
+          _this5.specificTasks.push(task);
         });
         document.getElementById('allTasks').textContent = list.name;
-        _this6.currentList = list;
+        _this5.currentList = list;
       });
     },
     markTask: function markTask(task) {
-      var _this7 = this;
+      var _this6 = this;
 
       axios.post('/tasks/' + task.id + '/check', {
         'task': task
       }).then(function (res) {
-        if (!_this7.isCompleted(task)) {
-          _this7.completedTasks.push(task.id);
+        if (!_this6.isCompleted(task)) {
+          _this6.completedTasks.push(task.id);
 
-          _this7.tasksData.find(function (taskA) {
+          _this6.tasksData.find(function (taskA) {
             if (taskA.id === task.id) {
               taskA.completed = 1;
             }
           });
         } else {
-          _this7.completedTasks.splice(_this7.completedTasks.indexOf(task.id), 1);
+          _this6.completedTasks.splice(_this6.completedTasks.indexOf(task.id), 1);
 
-          _this7.tasksData.find(function (taskA) {
+          _this6.tasksData.find(function (taskA) {
             if (taskA.id === task.id) {
               taskA.completed = 0;
             }
@@ -38761,243 +38761,239 @@ var render = function() {
             staticStyle: { "max-height": "390px", "min-height": "390px" }
           },
           [
-            _vm.tasks.length > 0
-              ? _c(
+            _c(
+              "div",
+              {
+                class:
+                  (_vm.tasksData.length > 0 ? "flex" : "hidden") +
+                  " list font-semibold relative text-grey-darkest text-base mb-6"
+              },
+              [
+                _c(
                   "div",
                   {
-                    staticClass:
-                      "list font-semibold relative flex text-grey-darkest text-base mb-6"
+                    ref: "listName-" + _vm.currentList.id,
+                    staticClass: "outline-none",
+                    attrs: { id: "allTasks" },
+                    on: { blur: _vm.saveList }
                   },
-                  [
-                    _c(
+                  [_vm._v("Alle taken")]
+                ),
+                _vm._v(" "),
+                !_vm.allTasks
+                  ? _c(
                       "div",
                       {
-                        ref: "listName-" + _vm.currentList.id,
-                        staticClass: "outline-none",
-                        attrs: { id: "allTasks" },
-                        on: { blur: _vm.saveList }
-                      },
-                      [_vm._v("Alle taken")]
-                    ),
-                    _vm._v(" "),
-                    !_vm.allTasks
-                      ? _c(
-                          "div",
-                          {
-                            staticClass:
-                              "change h-4 w-4 bg-grey-light rounded-full relative my-auto ml-2 cursor-pointer",
-                            on: { click: _vm.editList }
-                          },
-                          [
-                            _c(
-                              "svg",
-                              {
-                                staticClass: "text-white absolute fill-current",
-                                staticStyle: { top: "17%", left: "19%" },
-                                attrs: {
-                                  version: "1.1",
-                                  id: "Layer_1",
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  "xmlns:xlink": "http://www.w3.org/1999/xlink",
-                                  x: "0px",
-                                  y: "0px",
-                                  width: "10",
-                                  height: "10",
-                                  viewBox: "0 0 512 512",
-                                  "enable-background": "new 0 0 512 512",
-                                  "xml:space": "preserve"
-                                }
-                              },
-                              [
-                                _c("g", [
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M422.953,176.019c0.549-0.48,1.09-0.975,1.612-1.498l21.772-21.772c12.883-12.883,12.883-33.771,0-46.654l-40.434-40.434c-12.883-12.883-33.771-12.883-46.653,0l-21.772,21.772c-0.523,0.523-1.018,1.064-1.498,1.613L422.953,176.019z"
-                                    }
-                                  }),
-                                  _c("polygon", {
-                                    attrs: {
-                                      points:
-                                        "114.317,397.684 157.317,440.684 106.658,448.342 56,456 63.658,405.341 71.316,354.683 \t"
-                                    }
-                                  }),
-                                  _c("polygon", {
-                                    attrs: {
-                                      points:
-                                        "349.143,125.535 118.982,355.694 106.541,343.253 336.701,113.094 324.26,100.653 81.659,343.253 168.747,430.341 411.348,187.74 \t"
-                                    }
-                                  })
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        class:
-                          "bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"
+                        staticClass:
+                          "change h-4 w-4 bg-grey-light rounded-full relative my-auto ml-2 cursor-pointer",
+                        on: { click: _vm.editList }
                       },
                       [
                         _c(
-                          "a",
+                          "svg",
                           {
-                            staticClass: "no-underline",
+                            staticClass: "text-white absolute fill-current",
+                            staticStyle: { top: "17%", left: "19%" },
                             attrs: {
-                              href:
-                                "/task/create/" +
-                                (_vm.currentList.id !== undefined
-                                  ? _vm.currentList.id
-                                  : "")
+                              version: "1.1",
+                              id: "Layer_1",
+                              xmlns: "http://www.w3.org/2000/svg",
+                              "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                              x: "0px",
+                              y: "0px",
+                              width: "10",
+                              height: "10",
+                              viewBox: "0 0 512 512",
+                              "enable-background": "new 0 0 512 512",
+                              "xml:space": "preserve"
                             }
                           },
                           [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "my-auto select-none font-bold text-white absolute",
-                                staticStyle: {
-                                  bottom: "0",
-                                  top: "-29%",
-                                  left: "0",
-                                  right: "0"
+                            _c("g", [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M422.953,176.019c0.549-0.48,1.09-0.975,1.612-1.498l21.772-21.772c12.883-12.883,12.883-33.771,0-46.654l-40.434-40.434c-12.883-12.883-33.771-12.883-46.653,0l-21.772,21.772c-0.523,0.523-1.018,1.064-1.498,1.613L422.953,176.019z"
                                 }
-                              },
-                              [_vm._v("+")]
-                            )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "text-grey-dark select-none cursor-pointer ml-2",
-                        on: { click: _vm.sortTasks }
-                      },
-                      [
-                        _vm.sort === false || _vm.sort === null
-                          ? _c("div", { staticClass: "w-3 h-3" }, [
-                              _c(
-                                "svg",
-                                {
-                                  staticClass: "fill-current",
-                                  attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    viewBox: "0 0 512 512"
-                                  }
-                                },
-                                [
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M4.702 116.686l79.984-80.002c6.248-6.247 16.383-6.245 22.627 0l79.981 80.002c10.07 10.07 2.899 27.314-11.314 27.314H128v320c0 8.837-7.163 16-16 16H80c-8.837 0-16-7.163-16-16V144H16.016c-14.241 0-21.363-17.264-11.314-27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"
-                                    }
-                                  })
-                                ]
-                              )
+                              }),
+                              _c("polygon", {
+                                attrs: {
+                                  points:
+                                    "114.317,397.684 157.317,440.684 106.658,448.342 56,456 63.658,405.341 71.316,354.683 \t"
+                                }
+                              }),
+                              _c("polygon", {
+                                attrs: {
+                                  points:
+                                    "349.143,125.535 118.982,355.694 106.541,343.253 336.701,113.094 324.26,100.653 81.659,343.253 168.747,430.341 411.348,187.74 \t"
+                                }
+                              })
                             ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.sort === true
-                          ? _c("div", { staticClass: "w-3 h-3" }, [
-                              _c(
-                                "svg",
-                                {
-                                  staticClass: "fill-current",
-                                  attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    viewBox: "0 0 512 512"
-                                  }
-                                },
-                                [
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M187.298 395.314l-79.984 80.002c-6.248 6.247-16.383 6.245-22.627 0L4.705 395.314C-5.365 385.244 1.807 368 16.019 368H64V48c0-8.837 7.163-16 16-16h32c8.837 0 16 7.163 16 16v320h47.984c14.241 0 21.363 17.264 11.314 27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"
-                                    }
-                                  })
-                                ]
-                              )
-                            ])
-                          : _vm._e()
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "flex my-auto items-center justify-end flex-1 mr-8"
-                      },
-                      [
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter,
-                                expression: "filter"
-                              }
-                            ],
-                            staticClass: "text-sm",
-                            on: {
-                              change: [
-                                function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.filter = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                },
-                                _vm.filterMethod
-                              ]
-                            }
-                          },
-                          [
-                            _c(
-                              "option",
-                              { attrs: { disabled: "", selected: "" } },
-                              [_vm._v("Sorteer op status")]
-                            ),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "all" } }, [
-                              _vm._v("Alle taken")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "allCompleted" } }, [
-                              _vm._v("Alle afgeronde taken")
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "option",
-                              { attrs: { value: "allIncompleted" } },
-                              [_vm._v("Alle niet-afgeronde taken")]
-                            )
                           ]
                         )
                       ]
                     )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    class:
+                      "bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "no-underline",
+                        attrs: {
+                          href:
+                            "/task/create/" +
+                            (_vm.currentList.id !== undefined
+                              ? _vm.currentList.id
+                              : "")
+                        }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "my-auto select-none font-bold text-white absolute",
+                            staticStyle: {
+                              bottom: "0",
+                              top: "-29%",
+                              left: "0",
+                              right: "0"
+                            }
+                          },
+                          [_vm._v("+")]
+                        )
+                      ]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "text-grey-dark select-none cursor-pointer ml-2",
+                    on: { click: _vm.sortTasks }
+                  },
+                  [
+                    _vm.sort === false || _vm.sort === null
+                      ? _c("div", { staticClass: "w-3 h-3" }, [
+                          _c(
+                            "svg",
+                            {
+                              staticClass: "fill-current",
+                              attrs: {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                viewBox: "0 0 512 512"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M4.702 116.686l79.984-80.002c6.248-6.247 16.383-6.245 22.627 0l79.981 80.002c10.07 10.07 2.899 27.314-11.314 27.314H128v320c0 8.837-7.163 16-16 16H80c-8.837 0-16-7.163-16-16V144H16.016c-14.241 0-21.363-17.264-11.314-27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"
+                                }
+                              })
+                            ]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.sort === true
+                      ? _c("div", { staticClass: "w-3 h-3" }, [
+                          _c(
+                            "svg",
+                            {
+                              staticClass: "fill-current",
+                              attrs: {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                viewBox: "0 0 512 512"
+                              }
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  d:
+                                    "M187.298 395.314l-79.984 80.002c-6.248 6.247-16.383 6.245-22.627 0L4.705 395.314C-5.365 385.244 1.807 368 16.019 368H64V48c0-8.837 7.163-16 16-16h32c8.837 0 16 7.163 16 16v320h47.984c14.241 0 21.363 17.264 11.314 27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"
+                                }
+                              })
+                            ]
+                          )
+                        ])
+                      : _vm._e()
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "flex my-auto items-center justify-end flex-1 mr-8"
+                  },
+                  [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.filter,
+                            expression: "filter"
+                          }
+                        ],
+                        staticClass: "text-sm",
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.filter = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            _vm.filterMethod
+                          ]
+                        }
+                      },
+                      [
+                        _c(
+                          "option",
+                          { attrs: { disabled: "", selected: "" } },
+                          [_vm._v("Sorteer op status")]
+                        ),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "all" } }, [
+                          _vm._v("Alle taken")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "allCompleted" } }, [
+                          _vm._v("Alle afgeronde taken")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "allIncompleted" } }, [
+                          _vm._v("Alle niet-afgeronde taken")
+                        ])
+                      ]
+                    )
                   ]
                 )
-              : _vm._e(),
+              ]
+            ),
             _vm._v(" "),
-            !_vm.tasks.length > 0
+            !_vm.tasksData.length > 0
               ? _c(
                   "div",
                   {
