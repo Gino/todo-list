@@ -141,7 +141,7 @@
             },
 
             filterMethod () {
-                if (this.filter === 'all') {
+                if (this.filter === 'all' && this.sort !== null) {
                     this.sort === null
                 }
             },

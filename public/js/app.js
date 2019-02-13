@@ -2372,7 +2372,7 @@ __webpack_require__.r(__webpack_exports__);
       this.sort = !this.sort;
     },
     filterMethod: function filterMethod() {
-      if (this.filter === 'all') {
+      if (this.filter === 'all' && this.sort !== null) {
         this.sort === null;
       }
     },
