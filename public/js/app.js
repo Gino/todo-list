@@ -39007,7 +39007,13 @@ var render = function() {
                       "a",
                       {
                         staticClass: "no-underline",
-                        attrs: { href: "/task/create" }
+                        attrs: {
+                          href:
+                            "/task/create/" +
+                            (_vm.currentList.id !== undefined
+                              ? _vm.currentList.id
+                              : "")
+                        }
                       },
                       [
                         _c(

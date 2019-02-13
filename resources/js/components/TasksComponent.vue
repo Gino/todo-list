@@ -60,7 +60,7 @@
                 <div v-if="!tasksData.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>
                     Er zijn geen taken beschikbaar.
 
-                    <a class="no-underline" href="/task/create"><div :class='"bg-" + getColor() + " text-white rounded p-2 shadow-inner cursor-pointer hover:bg-" + getColor() + "-dark font-semibold w-2/5 mx-auto mt-4"'>
+                    <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'><div :class='"bg-" + getColor() + " text-white rounded p-2 shadow-inner cursor-pointer hover:bg-" + getColor() + "-dark font-semibold w-2/5 mx-auto mt-4"'>
                         Maak je eerste taak aan
                     </div></a>
                 </div>
