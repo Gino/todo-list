@@ -2312,6 +2312,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -2321,6 +2337,8 @@ __webpack_require__.r(__webpack_exports__);
       completedTasks: [],
       specificTasks: [],
       allTasks: true,
+      filter: 'all',
+      sort: null,
       tasksData: this.tasks,
       listsData: this.lists,
       user: {
@@ -2350,11 +2368,55 @@ __webpack_require__.r(__webpack_exports__);
     getColor: function getColor() {
       return this.color;
     },
+    sortTasks: function sortTasks() {
+      this.sort = !this.sort;
+    },
+    filterMethod: function filterMethod() {
+      if (this.filter === 'all') {
+        this.sort === null;
+      }
+    },
     getTasks: function getTasks() {
-      if (this.allTasks) {
-        return this.tasksData;
-      } else {
-        return this.specificTasks;
+      if (this.filter === 'all') {
+        if (this.allTasks) {
+          if (this.sort) {
+            return this.tasksData.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
+            });
+          } else if (this.sort === false) {
+            return this.tasksData.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
+            });
+          }
+
+          return this.tasksData;
+        } else {
+          if (this.sort) {
+            return this.specificTasks.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
+            });
+          } else if (this.sort === false) {
+            return this.specificTasks.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
+            });
+          }
+
+          return this.specificTasks;
+        }
+      } else if (this.filter === 'allIncompleted') {
+        this.sort = '';
+        return this.allTasks ? this.tasksData.filter(function (task) {
+          return task.completed === 0;
+        }) : this.specificTasks.filter(function (task) {
+          return task.completed === 0;
+        });
+      } else if (this.filter === 'allCompleted') {
+        this.sort = '';
+        return this.allTasks ? this.tasksData.filter(function (task) {
+          return task.completed === 1;
+        }) : this.specificTasks.filter(function (task) {
+          return task.completed === 1;
+        });
       }
     },
     editList: function editList() {
@@ -2438,7 +2500,23 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/tasks/' + task.id + '/check', {
         'task': task
       }).then(function (res) {
-        !_this7.isCompleted(task) ? _this7.completedTasks.push(task.id) : _this7.completedTasks.splice(_this7.completedTasks.indexOf(task.id), 1);
+        if (!_this7.isCompleted(task)) {
+          _this7.completedTasks.push(task.id);
+
+          _this7.tasksData.find(function (taskA) {
+            if (taskA.id === task.id) {
+              taskA.completed = 1;
+            }
+          });
+        } else {
+          _this7.completedTasks.splice(_this7.completedTasks.indexOf(task.id), 1);
+
+          _this7.tasksData.find(function (taskA) {
+            if (taskA.id === task.id) {
+              taskA.completed = 0;
+            }
+          });
+        }
       }).catch(function (err) {
         console.error(err);
       });
@@ -38786,6 +38864,125 @@ var render = function() {
                                 }
                               },
                               [_vm._v("+")]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "text-grey cursor-pointer ml-2",
+                        on: { click: _vm.sortTasks }
+                      },
+                      [
+                        _vm.sort === false || _vm.sort === null
+                          ? _c("div", { staticClass: "w-3 h-3" }, [
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "fill-current",
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    viewBox: "0 0 512 512"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M4.702 116.686l79.984-80.002c6.248-6.247 16.383-6.245 22.627 0l79.981 80.002c10.07 10.07 2.899 27.314-11.314 27.314H128v320c0 8.837-7.163 16-16 16H80c-8.837 0-16-7.163-16-16V144H16.016c-14.241 0-21.363-17.264-11.314-27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"
+                                    }
+                                  })
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.sort === true
+                          ? _c("div", { staticClass: "w-3 h-3" }, [
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "fill-current",
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    viewBox: "0 0 512 512"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M187.298 395.314l-79.984 80.002c-6.248 6.247-16.383 6.245-22.627 0L4.705 395.314C-5.365 385.244 1.807 368 16.019 368H64V48c0-8.837 7.163-16 16-16h32c8.837 0 16 7.163 16 16v320h47.984c14.241 0 21.363 17.264 11.314 27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"
+                                    }
+                                  })
+                                ]
+                              )
+                            ])
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "flex my-auto items-center justify-end flex-1 mr-8"
+                      },
+                      [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.filter,
+                                expression: "filter"
+                              }
+                            ],
+                            staticClass: "text-sm",
+                            on: {
+                              change: [
+                                function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.filter = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                },
+                                _vm.filterMethod
+                              ]
+                            }
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { disabled: "", selected: "" } },
+                              [_vm._v("Sorteer op status")]
+                            ),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "all" } }, [
+                              _vm._v("Alle taken")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "allCompleted" } }, [
+                              _vm._v("Alle afgeronde taken")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "option",
+                              { attrs: { value: "allIncompleted" } },
+                              [_vm._v("Alle niet-afgeronde taken")]
                             )
                           ]
                         )

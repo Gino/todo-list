@@ -17,6 +17,7 @@
                 <div v-if="!allTasks" @click="showAllTasks" class="font-semibold bg-grey-lighter text-grey-darkest cursor-pointer mb-4 text-sm rounded p-2">
                     Alle taken
                 </div>
+
                 <div v-for="list in listsData" :ref='"list-" + list.id' :key="list.id" class="list flex relative text-sm mb-2">
                     <span @click="getSpecificTasks(list)" :class='"text-" + getColor() + " cursor-pointer hover:underline"'>{{ list.name }}</span>
                     <div class="ml-1 text-xs my-auto text-grey-darker" v-if="list.user_id !== user.id">(Not yours)</div>
@@ -35,6 +36,26 @@
                     <div :class='"bg-grey-light mt-1 hover:bg-grey h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
                         <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'><div style="bottom: 0;top: -29%;left: 0;right: 0" class="my-auto font-bold text-white absolute">+</div></a>
                     </div>
+
+                    <!-- Sort -->
+                    <div class="text-grey cursor-pointer ml-2" @click="sortTasks">
+                        <div v-if="sort === false || sort === null" class="w-3 h-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="fill-current"><path d="M4.702 116.686l79.984-80.002c6.248-6.247 16.383-6.245 22.627 0l79.981 80.002c10.07 10.07 2.899 27.314-11.314 27.314H128v320c0 8.837-7.163 16-16 16H80c-8.837 0-16-7.163-16-16V144H16.016c-14.241 0-21.363-17.264-11.314-27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"></path></svg>
+                        </div>
+                        <div v-if="sort === true" class="w-3 h-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="fill-current"><path d="M187.298 395.314l-79.984 80.002c-6.248 6.247-16.383 6.245-22.627 0L4.705 395.314C-5.365 385.244 1.807 368 16.019 368H64V48c0-8.837 7.163-16 16-16h32c8.837 0 16 7.163 16 16v320h47.984c14.241 0 21.363 17.264 11.314 27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Filter -->
+                     <div class="flex my-auto items-center justify-end flex-1 mr-8">
+                        <select @change="filterMethod" v-model="filter" class="text-sm">
+                            <option disabled selected>Sorteer op status</option>
+                            <option value="all">Alle taken</option>
+                            <option value="allCompleted">Alle afgeronde taken</option>
+                            <option value="allIncompleted">Alle niet-afgeronde taken</option>
+                        </select>
+                     </div>
                 </div>
                 <div v-if="!tasks.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>
                     Er zijn geen taken beschikbaar.
@@ -51,11 +72,6 @@
                         <div id="task" @blur="saveTask(task)" :ref='task.id' class="w-full inline outline-none cursor-pointer" contenteditable tabindex="-1">{{ task.body }}</div>
                         <span :class='"text-" + getColor()' v-if="task.user_id !== user.id && task.user">(from {{ task.user.name }})</span>
                     </div>
-
-                    <!-- List changer -->
-                    <!-- <div class="text-xs my-auto bg-grey-lighter font-semibold text-grey-dark px-1 -ml-8 rounded">
-                        {{ getListFromTask(task) }}
-                    </div> -->
 
                     <!-- Delete button -->
                     <div :class='"bg-red-light hover:bg-red delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
@@ -83,10 +99,12 @@
                 completedTasks: [],
                 specificTasks: [],
                 allTasks: true,
+                filter: 'all',
+                sort: null,
                 tasksData: this.tasks,
                 listsData: this.lists,
                 user: {
-                    id: null
+                    id: null,
                 }
             }
         },
@@ -118,11 +136,57 @@
                 return this.color
             },
 
+            sortTasks () {
+                this.sort = !this.sort
+            },
+
+            filterMethod () {
+                if (this.filter === 'all') {
+                    this.sort === null
+                }
+            },
+
             getTasks () {
-                if (this.allTasks) {
-                    return this.tasksData
-                } else {
-                    return this.specificTasks
+                if (this.filter === 'all') {
+                    if (this.allTasks) {
+                        if (this.sort) {
+                            return this.tasksData.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
+                            })
+                        } else if (this.sort === false) {
+                            return this.tasksData.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
+                            })
+                        }
+
+                        return this.tasksData
+                    } else {
+                        if (this.sort) {
+                            return this.specificTasks.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
+                            })
+                        } else if (this.sort === false) {
+                            return this.specificTasks.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
+                            })
+                        }
+
+                        return this.specificTasks
+                    }
+                } else if (this.filter === 'allIncompleted') {
+                    this.sort = ''
+                    return (this.allTasks) ? this.tasksData.filter(task => {
+                        return task.completed === 0
+                    }) : this.specificTasks.filter(task => {
+                        return task.completed === 0
+                    })
+                } else if (this.filter === 'allCompleted') {
+                    this.sort = ''
+                    return (this.allTasks) ? this.tasksData.filter(task => {
+                        return task.completed === 1
+                    }) : this.specificTasks.filter(task => {
+                        return task.completed === 1
+                    })
                 }
             },
 
@@ -212,7 +276,24 @@
                 axios.post('/tasks/' + task.id + '/check', {
                     'task': task
                 }).then(res => {
-                    (!this.isCompleted(task)) ? this.completedTasks.push(task.id) : this.completedTasks.splice(this.completedTasks.indexOf(task.id), 1)
+                    if (!this.isCompleted(task)) {
+                        this.completedTasks.push(task.id)
+
+                        this.tasksData.find(taskA => {
+                            if (taskA.id === task.id) {
+                                taskA.completed = 1
+                            }
+                        })
+                    } else {
+                        this.completedTasks.splice(this.completedTasks.indexOf(task.id), 1)
+
+                        this.tasksData.find(taskA => {
+                            if (taskA.id === task.id) {
+                                taskA.completed = 0
+                            }
+                        })
+                    }
+
                 }).catch(err => {
                     console.error(err)
                 })
