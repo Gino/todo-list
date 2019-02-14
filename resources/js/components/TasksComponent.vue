@@ -20,7 +20,7 @@
 
                 <div v-for="list in listsData" :ref='"list-" + list.id' :key="list.id" class="list flex relative text-sm mb-2">
                     <span @click="getSpecificTasks(list)" :class='"text-" + getColor() + " cursor-pointer hover:underline"'>{{ list.name }}</span>
-                    <div class="ml-1 text-xs my-auto text-grey-darker" v-if="list.user_id !== user.id">(Not yours)</div>
+                    <div class="ml-1 text-xs my-auto text-grey-darker" v-if="list.user_id !== user.id && user.role.name === 'Administrator'">(Not yours)</div>
                     <div :class='"bg-red-light hover:bg-red delete h-4 w-4 rounded-full cursor-pointer p-2 flex flex-1 justify-end pin-r my-auto absolute text-center"'>
                         <div @click="deleteList(list)" style="bottom: 0;top: -25%;left: 0;right: 0" class="my-auto select-none font-bold text-white absolute">-</div>
                     </div>
@@ -38,7 +38,7 @@
                     </div>
 
                     <!-- Sort -->
-                    <div class="text-grey-dark select-none cursor-pointer ml-2" @click="sortTasks">
+                    <div class="text-grey select-none cursor-pointer ml-2" @click="sortTasks">
                         <div v-if="sort === false || sort === null" class="w-3 h-3">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="fill-current"><path d="M4.702 116.686l79.984-80.002c6.248-6.247 16.383-6.245 22.627 0l79.981 80.002c10.07 10.07 2.899 27.314-11.314 27.314H128v320c0 8.837-7.163 16-16 16H80c-8.837 0-16-7.163-16-16V144H16.016c-14.241 0-21.363-17.264-11.314-27.314zM240 96h256c8.837 0 16-7.163 16-16V48c0-8.837-7.163-16-16-16H240c-8.837 0-16 7.163-16 16v32c0 8.837 7.163 16 16 16zm-16 112v-32c0-8.837 7.163-16 16-16h192c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16zm0 256v-32c0-8.837 7.163-16 16-16h64c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16h-64c-8.837 0-16-7.163-16-16zm0-128v-32c0-8.837 7.163-16 16-16h128c8.837 0 16 7.163 16 16v32c0 8.837-7.163 16-16 16H240c-8.837 0-16-7.163-16-16z"></path></svg>
                         </div>
@@ -54,6 +54,9 @@
                             <option value="all">Alle taken</option>
                             <option value="allCompleted">Alle afgeronde taken</option>
                             <option value="allIncompleted">Alle niet-afgeronde taken</option>
+                            <option v-if="user.role.name === 'Administrator'" disabled>Administrator options</option>
+                            <option v-if="user.role.name === 'Administrator'" value="ownTasks">Alleen eigen taken</option>
+                            <option v-if="user.role.name === 'Administrator'" value="otherUserTasks">Alleen taken van anderen</option>
                         </select>
                      </div>
                 </div>
@@ -70,7 +73,7 @@
                     </div>
                     <div class="w-4/5">
                         <div id="task" @blur="saveTask(task)" :ref='task.id' class="w-full inline outline-none cursor-pointer" contenteditable tabindex="-1">{{ task.body }}</div>
-                        <span :class='"text-" + getColor()' v-if="task.user_id !== user.id && task.user">(from {{ task.user.name }})</span>
+                        <span :class='"text-" + getColor()' v-if="task.user_id !== user.id && task.user && user.role.name === 'Administrator'">(from {{ task.user.name }})</span>
                     </div>
 
                     <!-- Delete button -->
@@ -96,7 +99,6 @@
             return {
                 color: 'red',
                 currentList: '',
-                wait: false,
                 completedTasks: [],
                 specificTasks: [],
                 allTasks: true,
@@ -106,6 +108,9 @@
                 listsData: this.lists,
                 user: {
                     id: null,
+                    role: {
+                        name: null
+                    }
                 }
             }
         },
@@ -168,6 +173,94 @@
                     }) : this.specificTasks.filter(task => {
                         return task.completed === 1
                     })
+                } else if (this.filter === 'ownTasks') {
+                    if (this.allTasks) {
+                        if (this.sort === true) {
+                            const tasks = this.tasksData.filter(task => {
+                                return task.user_id === this.user.id
+                            })
+                            tasks.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
+                            })
+                        } else if (this.sort === false) {
+                            const tasks = this.tasksData.filter(task => {
+                                return task.user_id === this.user.id
+                            })
+                            tasks.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
+                            })
+                        }
+
+                        return this.tasksData.filter(task => {
+                            return task.user_id === this.user.id
+                        })
+                    } else {
+                        if (this.sort === true) {
+                            const tasks = this.specificTasks.filter(task => {
+                                return task.user_id === this.user.id
+                            })
+
+                            return tasks.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
+                            })
+                        } else if (this.sort === false) {
+                            const tasks = this.specificTasks.filter(task => {
+                                return task.user_id === this.user.id
+                            })
+
+                            return tasks.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
+                            })
+                        }
+
+                        return this.specificTasks.filter(task => {
+                            return task.user_id === this.user.id
+                        })
+                    }
+                } else if (this.filter === 'otherUserTasks') {
+                    if (this.allTasks) {
+                        if (this.sort === true) {
+                            const tasks = this.tasksData.filter(task => {
+                                return task.user_id !== this.user.id
+                            })
+                            tasks.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
+                            })
+                        } else if (this.sort === false) {
+                            const tasks = this.tasksData.filter(task => {
+                                return task.user_id !== this.user.id
+                            })
+                            tasks.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
+                            })
+                        }
+
+                        return this.tasksData.filter(task => {
+                            return task.user_id !== this.user.id
+                        })
+                    } else {
+                        if (this.sort === true) {
+                            const tasks = this.specificTasks.filter(task => {
+                                return task.user_id !== this.user.id
+                            })
+
+                            return tasks.sort((taskA, taskB) => {
+                                return taskB.completed - taskA.completed
+                            })
+                        } else if (this.sort === false) {
+                            const tasks = this.specificTasks.filter(task => {
+                                return task.user_id !== this.user.id
+                            })
+
+                            return tasks.sort((taskA, taskB) => {
+                                return taskA.completed - taskB.completed
+                            })
+                        }
+
+                        return this.specificTasks.filter(task => {
+                            return task.user_id !== this.user.id
+                        })
+                    }
                 }
             }
         },
@@ -202,7 +295,11 @@
             saveList() {
                 const value = this.$refs['listName-' + this.currentList.id].textContent
 
-                if (value === null || value == '' || value === this.currentList.name) return
+                const list = this.listsData.find(list => {
+                    return list.id === this.currentList.id
+                })
+
+                if (value === null || value == '' || value === list.name) return
 
                 axios.post('/lists/change/' + this.currentList.id, {
                     list: value

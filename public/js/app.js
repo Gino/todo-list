@@ -2328,13 +2328,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
     return {
       color: 'red',
       currentList: '',
-      wait: false,
       completedTasks: [],
       specificTasks: [],
       allTasks: true,
@@ -2343,7 +2345,10 @@ __webpack_require__.r(__webpack_exports__);
       tasksData: this.tasks,
       listsData: this.lists,
       user: {
-        id: null
+        id: null,
+        role: {
+          name: null
+        }
       }
     };
   },
@@ -2363,6 +2368,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     getTasks: function getTasks() {
+      var _this2 = this;
+
       if (this.filter === 'all') {
         if (this.allTasks) {
           if (this.sort === true) {
@@ -2403,6 +2410,97 @@ __webpack_require__.r(__webpack_exports__);
         }) : this.specificTasks.filter(function (task) {
           return task.completed === 1;
         });
+      } else if (this.filter === 'ownTasks') {
+        if (this.allTasks) {
+          if (this.sort === true) {
+            var tasks = this.tasksData.filter(function (task) {
+              return task.user_id === _this2.user.id;
+            });
+            tasks.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
+            });
+          } else if (this.sort === false) {
+            var _tasks = this.tasksData.filter(function (task) {
+              return task.user_id === _this2.user.id;
+            });
+
+            _tasks.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
+            });
+          }
+
+          return this.tasksData.filter(function (task) {
+            return task.user_id === _this2.user.id;
+          });
+        } else {
+          if (this.sort === true) {
+            var _tasks2 = this.specificTasks.filter(function (task) {
+              return task.user_id === _this2.user.id;
+            });
+
+            return _tasks2.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
+            });
+          } else if (this.sort === false) {
+            var _tasks3 = this.specificTasks.filter(function (task) {
+              return task.user_id === _this2.user.id;
+            });
+
+            return _tasks3.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
+            });
+          }
+
+          return this.specificTasks.filter(function (task) {
+            return task.user_id === _this2.user.id;
+          });
+        }
+      } else if (this.filter === 'otherUserTasks') {
+        if (this.allTasks) {
+          if (this.sort === true) {
+            var _tasks4 = this.tasksData.filter(function (task) {
+              return task.user_id !== _this2.user.id;
+            });
+
+            _tasks4.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
+            });
+          } else if (this.sort === false) {
+            var _tasks5 = this.tasksData.filter(function (task) {
+              return task.user_id !== _this2.user.id;
+            });
+
+            _tasks5.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
+            });
+          }
+
+          return this.tasksData.filter(function (task) {
+            return task.user_id !== _this2.user.id;
+          });
+        } else {
+          if (this.sort === true) {
+            var _tasks6 = this.specificTasks.filter(function (task) {
+              return task.user_id !== _this2.user.id;
+            });
+
+            return _tasks6.sort(function (taskA, taskB) {
+              return taskB.completed - taskA.completed;
+            });
+          } else if (this.sort === false) {
+            var _tasks7 = this.specificTasks.filter(function (task) {
+              return task.user_id !== _this2.user.id;
+            });
+
+            return _tasks7.sort(function (taskA, taskB) {
+              return taskA.completed - taskB.completed;
+            });
+          }
+
+          return this.specificTasks.filter(function (task) {
+            return task.user_id !== _this2.user.id;
+          });
+        }
       }
     }
   },
@@ -2428,15 +2526,18 @@ __webpack_require__.r(__webpack_exports__);
       this.focus(element);
     },
     saveList: function saveList() {
-      var _this2 = this;
+      var _this3 = this;
 
       var value = this.$refs['listName-' + this.currentList.id].textContent;
-      if (value === null || value == '' || value === this.currentList.name) return;
+      var list = this.listsData.find(function (list) {
+        return list.id === _this3.currentList.id;
+      });
+      if (value === null || value == '' || value === list.name) return;
       axios.post('/lists/change/' + this.currentList.id, {
         list: value
       }).then(function (res) {
-        _this2.listsData = res.data;
-        var element = _this2.$refs['listName-' + _this2.currentList.id];
+        _this3.listsData = res.data;
+        var element = _this3.$refs['listName-' + _this3.currentList.id];
         element.contentEditable = false;
       });
     },
@@ -2446,14 +2547,14 @@ __webpack_require__.r(__webpack_exports__);
       })[0].name;
     },
     saveTask: function saveTask(task) {
-      var _this3 = this;
+      var _this4 = this;
 
       var value = this.$refs[task.id][0].textContent;
       if (value === null || value == '' || value === task.body) return;
       axios.post('/tasks/change/' + task.id, {
         task: value
       }).then(function (res) {
-        _this3.tasksData = res.data;
+        _this4.tasksData = res.data;
       });
     },
     showAllTasks: function showAllTasks() {
@@ -2470,51 +2571,51 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deleteList: function deleteList(list) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/lists/delete/' + list.id).then(function (res) {
         if (res.status !== 200) return;
 
-        _this4.$refs["list-" + list.id][0].remove();
+        _this5.$refs["list-" + list.id][0].remove();
       });
     },
     getSpecificTasks: function getSpecificTasks(list) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.specificTasks = [];
       this.allTasks = false;
       axios.get('/tasks/list/' + list.id).then(function (res) {
         if (res.status !== 200) {
-          _this5.allTasks = true;
+          _this6.allTasks = true;
           return;
         }
 
         var tasks = res.data;
         tasks.forEach(function (task) {
-          _this5.specificTasks.push(task);
+          _this6.specificTasks.push(task);
         });
         document.getElementById('allTasks').textContent = list.name;
-        _this5.currentList = list;
+        _this6.currentList = list;
       });
     },
     markTask: function markTask(task) {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.post('/tasks/' + task.id + '/check', {
         'task': task
       }).then(function (res) {
-        if (!_this6.isCompleted(task)) {
-          _this6.completedTasks.push(task.id);
+        if (!_this7.isCompleted(task)) {
+          _this7.completedTasks.push(task.id);
 
-          _this6.tasksData.find(function (taskA) {
+          _this7.tasksData.find(function (taskA) {
             if (taskA.id === task.id) {
               taskA.completed = 1;
             }
           });
         } else {
-          _this6.completedTasks.splice(_this6.completedTasks.indexOf(task.id), 1);
+          _this7.completedTasks.splice(_this7.completedTasks.indexOf(task.id), 1);
 
-          _this6.tasksData.find(function (taskA) {
+          _this7.tasksData.find(function (taskA) {
             if (taskA.id === task.id) {
               taskA.completed = 0;
             }
@@ -38446,11 +38547,11 @@ var render = function() {
           "div",
           {
             staticClass:
-              "w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-8 overflow-y-auto",
+              "w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-4 overflow-y-auto",
             staticStyle: { "max-height": "390px", "min-height": "390px" }
           },
           [
-            _c("div", { staticClass: "mt-2 font-semibold text-grey-darkest" }, [
+            _c("div", { staticClass: "font-semibold text-grey-darkest" }, [
               _vm._v("Jouw gegevens")
             ]),
             _vm._v(" "),
@@ -38708,7 +38809,8 @@ var render = function() {
                     [_vm._v(_vm._s(list.name))]
                   ),
                   _vm._v(" "),
-                  list.user_id !== _vm.user.id
+                  list.user_id !== _vm.user.id &&
+                  _vm.user.role.name === "Administrator"
                     ? _c(
                         "div",
                         {
@@ -38877,8 +38979,7 @@ var render = function() {
                 _c(
                   "div",
                   {
-                    staticClass:
-                      "text-grey-dark select-none cursor-pointer ml-2",
+                    staticClass: "text-grey select-none cursor-pointer ml-2",
                     on: { click: _vm.sortTasks }
                   },
                   [
@@ -38985,7 +39086,27 @@ var render = function() {
                         _vm._v(" "),
                         _c("option", { attrs: { value: "allIncompleted" } }, [
                           _vm._v("Alle niet-afgeronde taken")
-                        ])
+                        ]),
+                        _vm._v(" "),
+                        _vm.user.role.name === "Administrator"
+                          ? _c("option", { attrs: { disabled: "" } }, [
+                              _vm._v("Administrator options")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.user.role.name === "Administrator"
+                          ? _c("option", { attrs: { value: "ownTasks" } }, [
+                              _vm._v("Alleen eigen taken")
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.user.role.name === "Administrator"
+                          ? _c(
+                              "option",
+                              { attrs: { value: "otherUserTasks" } },
+                              [_vm._v("Alleen taken van anderen")]
+                            )
+                          : _vm._e()
                       ]
                     )
                   ]
@@ -39119,7 +39240,9 @@ var render = function() {
                       [_vm._v(_vm._s(task.body))]
                     ),
                     _vm._v(" "),
-                    task.user_id !== _vm.user.id && task.user
+                    task.user_id !== _vm.user.id &&
+                    task.user &&
+                    _vm.user.role.name === "Administrator"
                       ? _c("span", { class: "text-" + _vm.getColor() }, [
                           _vm._v("(from " + _vm._s(task.user.name) + ")")
                         ])
