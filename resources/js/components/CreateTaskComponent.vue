@@ -93,7 +93,6 @@ export default {
             if (this.errors.task === null && this.errors.list === null) {
                 this.disabled = true
 
-                // axios post
                 axios.post('/tasks/create', {
                     task: this.fields.task,
                     list: this.fields.list

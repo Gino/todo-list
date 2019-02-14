@@ -70,7 +70,6 @@ export default {
             if (this.errors.list === null) {
                 this.disabled = true
 
-                // axios post
                 axios.post('/lists/create', {
                     list: this.fields.list
                 }).then((res) => {

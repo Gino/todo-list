@@ -1823,8 +1823,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.errors.list === null) {
-        this.disabled = true; // axios post
-
+        this.disabled = true;
         axios.post('/lists/create', {
           list: this.fields.list
         }).then(function (res) {
@@ -1929,8 +1928,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (this.errors.task === null && this.errors.list === null) {
-        this.disabled = true; // axios post
-
+        this.disabled = true;
         axios.post('/tasks/create', {
           task: this.fields.task,
           list: this.fields.list

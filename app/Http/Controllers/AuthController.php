@@ -32,13 +32,13 @@ class AuthController extends Controller
             return abort(403);
         }
 
-        // if ($request->ajax()) {
-        return response()->json([
-            'users' => User::with('role', 'tasks')->get(),
-        ]);
-        // } else {
-            // abort(404);
-        // }
+        if ($request->ajax()) {
+            return response()->json([
+                'users' => User::with('role', 'tasks')->get(),
+            ]);
+        } else {
+            abort(404);
+        }
     }
 
     public function login(Request $request)
