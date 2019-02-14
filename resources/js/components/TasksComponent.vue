@@ -136,11 +136,11 @@
                 if (this.filter === 'all') {
                     if (this.allTasks) {
                         if (this.sort === true) {
-                            this.tasksData.sort((taskA, taskB) => {
+                            return this.tasksData.sort((taskA, taskB) => {
                                 return taskB.completed - taskA.completed
                             })
                         } else if (this.sort === false) {
-                            this.tasksData.sort((taskA, taskB) => {
+                            return this.tasksData.sort((taskA, taskB) => {
                                 return taskA.completed - taskB.completed
                             })
                         }
@@ -160,6 +160,7 @@
                         return this.specificTasks
                     }
                 } else if (this.filter === 'allIncompleted') {
+                    document.getElementById('allTasks').textContent = 'Alle niet-afgeronde taken'
                     this.sort = ''
                     return (this.allTasks) ? this.tasksData.filter(task => {
                         return task.completed === 0
@@ -167,6 +168,7 @@
                         return task.completed === 0
                     })
                 } else if (this.filter === 'allCompleted') {
+                    document.getElementById('allTasks').textContent = 'Alle afgeronde taken'
                     this.sort = ''
                     return (this.allTasks) ? this.tasksData.filter(task => {
                         return task.completed === 1
@@ -174,19 +176,20 @@
                         return task.completed === 1
                     })
                 } else if (this.filter === 'ownTasks') {
+                    document.getElementById('allTasks').textContent = 'Alle eigen taken'
                     if (this.allTasks) {
                         if (this.sort === true) {
                             const tasks = this.tasksData.filter(task => {
                                 return task.user_id === this.user.id
                             })
-                            tasks.sort((taskA, taskB) => {
+                            return tasks.sort((taskA, taskB) => {
                                 return taskB.completed - taskA.completed
                             })
                         } else if (this.sort === false) {
                             const tasks = this.tasksData.filter(task => {
                                 return task.user_id === this.user.id
                             })
-                            tasks.sort((taskA, taskB) => {
+                            return tasks.sort((taskA, taskB) => {
                                 return taskA.completed - taskB.completed
                             })
                         }
@@ -218,19 +221,20 @@
                         })
                     }
                 } else if (this.filter === 'otherUserTasks') {
+                    document.getElementById('allTasks').textContent = 'Alle taken van anderen'
                     if (this.allTasks) {
                         if (this.sort === true) {
                             const tasks = this.tasksData.filter(task => {
                                 return task.user_id !== this.user.id
                             })
-                            tasks.sort((taskA, taskB) => {
+                            return tasks.sort((taskA, taskB) => {
                                 return taskB.completed - taskA.completed
                             })
                         } else if (this.sort === false) {
                             const tasks = this.tasksData.filter(task => {
                                 return task.user_id !== this.user.id
                             })
-                            tasks.sort((taskA, taskB) => {
+                            return tasks.sort((taskA, taskB) => {
                                 return taskA.completed - taskB.completed
                             })
                         }
@@ -281,7 +285,7 @@
             },
 
             filterMethod () {
-                if (this.filter === 'all' && this.sort !== null) {
+                if ((this.filter === 'all' || this.filter === 'ownTasks' || this.filter === 'otherUserTasks') && this.sort === '') {
                     this.sort = null
                 }
             },

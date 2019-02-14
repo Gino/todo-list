@@ -100,15 +100,15 @@ class TasksController extends Controller
 
     public function getSpecificTasks($list)
     {
-        if (!request()->ajax()) {
-            abort(404);
-        }
+        // if (!request()->ajax()) {
+        //     abort(404);
+        // }
         $list = ListModel::find($list);
 
 
         if (count($list) > 0) {
             if (auth()->user()->role->name === 'Administrator') {
-                $tasks = $list->tasks;
+                $tasks = TaskModel::where('list_id', $list->id)->with('user')->get();
             } else {
                 $tasks = $list->tasks->where('user_id', auth()->user()->id);
             }
