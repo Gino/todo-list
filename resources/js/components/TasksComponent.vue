@@ -129,6 +129,8 @@
 
                 this.user = response.data.user
             })
+
+            this.user.role.name === 'Administrator' ? this.filter = 'all' : this.filter = 'ownTasks'
         },
 
         computed: {
@@ -160,7 +162,7 @@
                         return this.specificTasks
                     }
                 } else if (this.filter === 'allIncompleted') {
-                    document.getElementById('allTasks').textContent = 'Alle niet-afgeronde taken'
+                    if (this.allTasks) document.getElementById('allTasks').textContent = 'Alle niet-afgeronde taken'
                     this.sort = ''
                     return (this.allTasks) ? this.tasksData.filter(task => {
                         return task.completed === 0
@@ -168,7 +170,7 @@
                         return task.completed === 0
                     })
                 } else if (this.filter === 'allCompleted') {
-                    document.getElementById('allTasks').textContent = 'Alle afgeronde taken'
+                    if (this.allTasks) document.getElementById('allTasks').textContent = 'Alle afgeronde taken'
                     this.sort = ''
                     return (this.allTasks) ? this.tasksData.filter(task => {
                         return task.completed === 1
@@ -176,7 +178,7 @@
                         return task.completed === 1
                     })
                 } else if (this.filter === 'ownTasks') {
-                    document.getElementById('allTasks').textContent = 'Alle eigen taken'
+                    if (this.allTasks) document.getElementById('allTasks').textContent = 'Alle eigen taken'
                     if (this.allTasks) {
                         if (this.sort === true) {
                             const tasks = this.tasksData.filter(task => {
@@ -221,7 +223,7 @@
                         })
                     }
                 } else if (this.filter === 'otherUserTasks') {
-                    document.getElementById('allTasks').textContent = 'Alle taken van anderen'
+                    if (this.allTasks) document.getElementById('allTasks').textContent = 'Alle taken van anderen'
                     if (this.allTasks) {
                         if (this.sort === true) {
                             const tasks = this.tasksData.filter(task => {
