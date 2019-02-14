@@ -2337,6 +2337,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks', 'lists'],
   data: function data() {
@@ -2370,8 +2372,8 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/user').then(function (response) {
       if (response.status !== 200) return;
       _this.user = response.data.user;
+      response.data.user.role.name === 'Administrator' ? _this.filter = 'ownTasks' : _this.filter = 'all';
     });
-    this.user.role.name === 'Administrator' ? this.filter = 'all' : this.filter = 'ownTasks';
   },
   computed: {
     getTasks: function getTasks() {
@@ -39152,9 +39154,8 @@ var render = function() {
                     class: "text-center mt-3 text-" + _vm.getColor() + "-dark"
                   },
                   [
-                    _vm._v(
-                      "\n                Er zijn geen taken beschikbaar.\n\n                "
-                    ),
+                    _c("div", [_vm._v("Er zijn geen taken beschikbaar.")]),
+                    _vm._v(" "),
                     _c(
                       "a",
                       {
@@ -39169,7 +39170,7 @@ var render = function() {
                       },
                       [
                         _c(
-                          "div",
+                          "button",
                           {
                             class:
                               "bg-" +
@@ -39180,7 +39181,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                    Maak je eerste taak aan\n                "
+                              "\n                            Maak je eerste taak aan\n                        "
                             )
                           ]
                         )

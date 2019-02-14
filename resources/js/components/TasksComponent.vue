@@ -61,11 +61,13 @@
                      </div>
                 </div>
                 <div v-if="!tasksData.length > 0" :class='"text-center mt-3 text-" + getColor() + "-dark"'>
-                    Er zijn geen taken beschikbaar.
+                    <div>Er zijn geen taken beschikbaar.</div>
 
-                    <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'><div :class='"bg-" + getColor() + " text-white rounded p-2 shadow-inner cursor-pointer hover:bg-" + getColor() + "-dark font-semibold w-2/5 mx-auto mt-4"'>
-                        Maak je eerste taak aan
-                    </div></a>
+                        <a class="no-underline" :href='"/task/create/" + ((currentList.id !== undefined) ? currentList.id : "")'>
+                            <button :class='"bg-" + getColor() + " text-white rounded p-2 shadow-inner cursor-pointer hover:bg-" + getColor() + "-dark font-semibold w-2/5 mx-auto mt-4"'>
+                                Maak je eerste taak aan
+                            </button>
+                        </a>
                 </div>
                 <div v-for="task in getTasks" :ref='"task-" + task.id' :key="task.id" class="task relative flex border-b pb-3 mb-6">
                     <div @click="markTask(task)" :class='"relative border border-grey-light my-auto rounded-full mr-4 text-center text-grey-dark cursor-pointer hover:border-" + getColor() + "-dark hover:text-" + getColor()' style="min-width: 1.25rem; min-height: 1.25rem">
@@ -128,9 +130,9 @@
                 if (response.status !== 200) return
 
                 this.user = response.data.user
-            })
 
-            this.user.role.name === 'Administrator' ? this.filter = 'all' : this.filter = 'ownTasks'
+                response.data.user.role.name === 'Administrator' ? this.filter = 'ownTasks' : this.filter = 'all'
+            })
         },
 
         computed: {
