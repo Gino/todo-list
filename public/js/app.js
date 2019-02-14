@@ -51344,6 +51344,44 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js sync recursive \\.vue$/":
+/*!***********************************!*\
+  !*** ./resources/js sync \.vue$/ ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./components/CreateListComponent.vue": "./resources/js/components/CreateListComponent.vue",
+	"./components/CreateTaskComponent.vue": "./resources/js/components/CreateTaskComponent.vue",
+	"./components/LoginComponent.vue": "./resources/js/components/LoginComponent.vue",
+	"./components/ProfileComponent.vue": "./resources/js/components/ProfileComponent.vue",
+	"./components/TasksComponent.vue": "./resources/js/components/TasksComponent.vue"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) { // check for number or string
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return id;
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/js sync recursive \\.vue$/";
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -51366,14 +51404,12 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('tasks-component', __webpack_require__(/*! ./components/TasksComponent.vue */ "./resources/js/components/TasksComponent.vue").default);
-Vue.component('login-component', __webpack_require__(/*! ./components/LoginComponent.vue */ "./resources/js/components/LoginComponent.vue").default);
-Vue.component('create-task-component', __webpack_require__(/*! ./components/CreateTaskComponent.vue */ "./resources/js/components/CreateTaskComponent.vue").default);
-Vue.component('create-list-component', __webpack_require__(/*! ./components/CreateListComponent.vue */ "./resources/js/components/CreateListComponent.vue").default);
-Vue.component('profile-component', __webpack_require__(/*! ./components/ProfileComponent.vue */ "./resources/js/components/ProfileComponent.vue").default);
+var files = __webpack_require__("./resources/js sync recursive \\.vue$/");
+
+files.keys().map(function (key) {
+  return Vue.component(key.split('/').pop().split('.')[0], files(key).default);
+});
 Vue.use(__webpack_require__(/*! vue-cookies */ "./node_modules/vue-cookies/vue-cookies.js"));
 /**`
  * Next, we will create a fresh Vue application instance and attach it to

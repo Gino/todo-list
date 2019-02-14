@@ -17,14 +17,8 @@ window.Vue = require('vue');
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('tasks-component', require('./components/TasksComponent.vue').default);
-Vue.component('login-component', require('./components/LoginComponent.vue').default);
-Vue.component('create-task-component', require('./components/CreateTaskComponent.vue').default);
-Vue.component('create-list-component', require('./components/CreateListComponent.vue').default);
-Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
+const files = require.context('./', true, /\.vue$/i)
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.use(require('vue-cookies'))
 
