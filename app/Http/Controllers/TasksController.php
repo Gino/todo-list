@@ -100,9 +100,9 @@ class TasksController extends Controller
 
     public function getSpecificTasks($list)
     {
-        // if (!request()->ajax()) {
-        //     abort(404);
-        // }
+        if (!request()->ajax()) {
+            abort(404);
+        }
         $list = ListModel::find($list);
 
 
