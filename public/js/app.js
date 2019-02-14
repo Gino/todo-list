@@ -2166,6 +2166,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2207,8 +2213,8 @@ __webpack_require__.r(__webpack_exports__);
     getError: function getError(field) {
       return this.errors[field];
     },
-    getCreatedAtDate: function getCreatedAtDate() {
-      var date = new Date(this.user.created_at);
+    getCreatedAtDate: function getCreatedAtDate(date) {
+      var d = new Date(date);
       var month = [];
       month[0] = "Januari";
       month[1] = "Februari";
@@ -2222,7 +2228,7 @@ __webpack_require__.r(__webpack_exports__);
       month[9] = "Oktober";
       month[10] = "November";
       month[11] = "December";
-      return date.getDay() + " " + month[date.getMonth()] + " " + date.getFullYear() + " - " + date.getHours() + ":" + date.getMinutes();
+      return d.getDay() + " " + month[d.getMonth()] + " " + d.getFullYear() + " - " + d.getHours() + ":" + d.getMinutes();
     }
   }
 });
@@ -38595,7 +38601,7 @@ var render = function() {
               staticClass:
                 "mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed",
               attrs: { type: "email", disabled: "" },
-              domProps: { value: _vm.getCreatedAtDate() }
+              domProps: { value: _vm.getCreatedAtDate(this.user.created_at) }
             }),
             _vm._v(" "),
             _vm.user.role.name === "Administrator"
@@ -38620,11 +38626,23 @@ var render = function() {
                         "tr",
                         { key: user.id, staticClass: "text-black" },
                         [
-                          _c("td", [_vm._v(_vm._s(user.id))]),
+                          _c("td", { staticClass: "font-semibold" }, [
+                            _vm._v(_vm._s(user.id))
+                          ]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(user.name))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(user.role.name))])
+                          _c("td", [_vm._v(_vm._s(user.email))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(user.role.name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(user.tasks.length))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(_vm.getCreatedAtDate(user.created_at))
+                            )
+                          ])
                         ]
                       )
                     })
@@ -38680,7 +38698,13 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", { staticClass: "text-left" }, [_vm._v("Naam")]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-left" }, [_vm._v("Rol")])
+      _c("th", { staticClass: "text-left" }, [_vm._v("E-mail")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-left" }, [_vm._v("Rol")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-left" }, [_vm._v("Aantal taken")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "text-left" }, [_vm._v("Aanmaakdatum")])
     ])
   }
 ]

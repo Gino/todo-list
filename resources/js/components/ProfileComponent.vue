@@ -15,19 +15,25 @@
                 <input type="email" :value="user.role.name" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
 
                 <div class="mt-4 font-semibold text-grey-darkest">Profile aangemaakt op</div>
-                <input type="email" :value="getCreatedAtDate()" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
+                <input type="email" :value="getCreatedAtDate(this.user.created_at)" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
 
                 <div v-if="user.role.name === 'Administrator'" class="mt-8 font-semibold text-grey-darkest">Alle gebruikers</div>
                 <table v-if="user.role.name === 'Administrator'" class="leading-normal mt-2 w-full text-grey-darker">
                     <tr>
                         <th class="text-left">#</th>
                         <th class="text-left">Naam</th>
+                        <th class="text-left">E-mail</th>
                         <th class="text-left">Rol</th>
+                        <th class="text-left">Aantal taken</th>
+                        <th class="text-left">Aanmaakdatum</th>
                     </tr>
                     <tr class="text-black" v-for="user in users" :key="user.id">
-                        <td>{{ user.id }}</td>
+                        <td class="font-semibold">{{ user.id }}</td>
                         <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
                         <td>{{ user.role.name }}</td>
+                        <td>{{ user.tasks.length }}</td>
+                        <td>{{ getCreatedAtDate(user.created_at) }}</td>
                     </tr>
                 </table>
             </div>
@@ -88,8 +94,8 @@ export default {
             return this.errors[field]
         },
 
-        getCreatedAtDate() {
-            const date = new Date(this.user.created_at)
+        getCreatedAtDate(date) {
+            const d = new Date(date)
 
             var month = [];
             month[0] = "Januari";
@@ -105,7 +111,7 @@ export default {
             month[10] = "November";
             month[11] = "December";
 
-            return date.getDay() + " " + month[date.getMonth()] + " " + date.getFullYear() + " - " + date.getHours() + ":" + date.getMinutes()
+            return d.getDay() + " " + month[d.getMonth()] + " " + d.getFullYear() + " - " + d.getHours() + ":" + d.getMinutes()
         }
     }
 }
