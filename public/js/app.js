@@ -2242,6 +2242,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 //
 //
 //
@@ -2542,12 +2544,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       var value = this.$refs['listName-' + this.currentList.id].textContent;
+      value = (_readOnlyError("value"), value.trim(value));
       var list = this.listsData.find(function (list) {
         return list.id === _this3.currentList.id;
       });
       if (value === null || value == '' || value === list.name) return;
       axios.post('/lists/change/' + this.currentList.id, {
-        list: value.trim(value)
+        list: value
       }).then(function (res) {
         _this3.listsData = res.data;
         var element = _this3.$refs['listName-' + _this3.currentList.id];
@@ -38589,7 +38592,7 @@ var render = function() {
             _c("input", {
               staticClass:
                 "mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed",
-              attrs: { type: "email", disabled: "" },
+              attrs: { type: "text", disabled: "" },
               domProps: { value: _vm.user.role.name }
             }),
             _vm._v(" "),
@@ -38600,7 +38603,7 @@ var render = function() {
             _c("input", {
               staticClass:
                 "mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed",
-              attrs: { type: "email", disabled: "" },
+              attrs: { type: "text", disabled: "" },
               domProps: { value: _vm.getCreatedAtDate(this.user.created_at) }
             }),
             _vm._v(" "),

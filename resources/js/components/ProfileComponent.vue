@@ -12,10 +12,10 @@
                 <input type="email" :value="user.email" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
 
                 <div class="mt-4 font-semibold text-grey-darkest">Jouw rol</div>
-                <input type="email" :value="user.role.name" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
+                <input type="text" :value="user.role.name" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
 
                 <div class="mt-4 font-semibold text-grey-darkest">Profile aangemaakt op</div>
-                <input type="email" :value="getCreatedAtDate(this.user.created_at)" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
+                <input type="text" :value="getCreatedAtDate(this.user.created_at)" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
 
                 <div v-if="user.role.name === 'Administrator'" class="mt-8 font-semibold text-grey-darkest">Alle gebruikers</div>
                 <table v-if="user.role.name === 'Administrator'" class="leading-normal mt-2 w-full text-grey-darker">
