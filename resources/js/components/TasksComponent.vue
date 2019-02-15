@@ -302,7 +302,7 @@
 
             saveList() {
                 const value = this.$refs['listName-' + this.currentList.id].textContent
-
+                value = value.trim(value)
                 const list = this.listsData.find(list => {
                     return list.id === this.currentList.id
                 })

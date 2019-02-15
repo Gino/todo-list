@@ -2547,7 +2547,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       if (value === null || value == '' || value === list.name) return;
       axios.post('/lists/change/' + this.currentList.id, {
-        list: value
+        list: value.trim(value)
       }).then(function (res) {
         _this3.listsData = res.data;
         var element = _this3.$refs['listName-' + _this3.currentList.id];
