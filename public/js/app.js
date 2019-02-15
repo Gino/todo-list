@@ -38560,7 +38560,7 @@ var render = function() {
           "div",
           {
             staticClass:
-              "w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-4 overflow-y-auto",
+              "w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-6 overflow-y-auto",
             staticStyle: { "max-height": "390px", "min-height": "390px" }
           },
           [

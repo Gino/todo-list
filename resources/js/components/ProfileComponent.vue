@@ -6,7 +6,7 @@
             <a href="/logout" :class='"justify-end text-white no-underline text-sm bg-" + getColor() + "-dark px-3 py-2 rounded cursor-pointer ml-3"'>Uitloggen</a>
         </div>
         <div class="leading-normal sm:rounded-b rounded-none flex shadow sm:flex-row flex-col-reverse">
-            <div class="w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-4 overflow-y-auto" style="max-height: 390px; min-height: 390px">
+            <div class="w-full p-6 sm:rounded-b rounded-none text-sm bg-white pt-6 overflow-y-auto" style="max-height: 390px; min-height: 390px">
                 <div class="font-semibold text-grey-darkest">Jouw gegevens</div>
                 <input type="text" :value="user.name" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
                 <input type="email" :value="user.email" class="mt-2 w-1/2 block border py-2 px-2 rounded cursor-not-allowed" disabled>
