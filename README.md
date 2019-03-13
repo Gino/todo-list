@@ -6,10 +6,11 @@
 ## Installation
 1. `composer install`
 2. `cp .env.example .env`
-3. Fill in your database credentials.
-4. `php artisan migrate`
-5. `npm install`
-6. The application is now fully working. :tada:
+3. `php artisan key:generate`
+4. Fill in your database credentials.
+5. `php artisan migrate`
+6. `npm install`
+7. The application is now fully working. :tada:
 
 ## Trello
 https://trello.com/b/hqhspEbB/stemwijzer-todo-list
