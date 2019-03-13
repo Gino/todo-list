@@ -8,7 +8,8 @@
 2. `cp .env.example .env`
 3. Fill in your database credentials.
 4. `php artisan migrate`
-5. The application is now fully working. :tada:
+5. `npm install`
+6. The application is now fully working. :tada:
 
 ## Trello
 https://trello.com/b/hqhspEbB/stemwijzer-todo-list
